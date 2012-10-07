@@ -1,0 +1,12 @@
+{
+    "name" : "core:redbook",
+    "Item" : {
+        "name" : "RedBook",
+        "icon" : "RedBook",
+        "usage" : "ON_USER",
+        "renderWithIcon" : true
+    },
+    "Book" : {
+        "type" : "WContents"
+    }
+}
