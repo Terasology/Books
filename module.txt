@@ -1,0 +1,9 @@
+{
+    "id" : "Books",
+    "version" : "0.1.0",
+    "author" : "bi0hax",
+    "displayName" : "Books and Bookcases",
+    "description" : "This module introduces books and bookcases",
+    "dependencies" : [],
+    "isServerSideOnly" : false
+}
