@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Moving Blocks
+ * Copyright 2016 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,18 +19,10 @@ package org.terasology.books.logic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
-import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.logic.inventory.InventoryComponent;
-import org.terasology.logic.inventory.ItemComponent;
-import org.terasology.logic.location.LocationComponent;
 import org.terasology.registry.In;
-import org.terasology.world.block.items.BlockItemComponent;
-
-import javax.vecmath.Vector3f;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 
@@ -49,3 +41,4 @@ public class BookcaseSystem extends BaseComponentSystem {
     public void shutdown() {
     }
 }
+

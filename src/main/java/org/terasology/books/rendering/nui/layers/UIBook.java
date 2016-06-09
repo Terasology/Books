@@ -13,35 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.books.rendering.gui.windows;
+
+package org.terasology.books.rendering.nui.layers;
 
 import org.terasology.math.geom.Rect2i;
 import org.terasology.math.geom.Vector2i;
-import org.terasology.rendering.assets.texture.Texture;
 import org.terasology.rendering.assets.texture.TextureRegion;
 import org.terasology.rendering.nui.Canvas;
 import org.terasology.rendering.nui.Color;
 import org.terasology.rendering.nui.CoreWidget;
-import org.terasology.rendering.nui.LayoutConfig;
 import org.terasology.rendering.nui.databinding.Binding;
 import org.terasology.rendering.nui.databinding.DefaultBinding;
 import org.terasology.utilities.Assets;
 
-/**
- * Created by Jared Johnson on 6/7/2016.
- */
+
 public class UIBook extends CoreWidget {
-    private TextureRegion interior_left = Assets.getTextureRegion("Books:book#interiorLeft").get();
-    private TextureRegion interior_right = Assets.getTextureRegion("Books:book#interiorRight").get();
-    private TextureRegion exterior_left = Assets.getTextureRegion("Books:book#exteriorLeft").get();
-    private TextureRegion exterior_right = Assets.getTextureRegion("Books:book#exteriorRight").get();
-    private TextureRegion page_left = Assets.getTextureRegion("Books:book#pageLeft").get();
-    private TextureRegion page_right = Assets.getTextureRegion("Books:book#pageRight").get();
+    private TextureRegion interiorLeft = Assets.getTextureRegion("Books:book#interiorLeft").get();
+    private TextureRegion interiorRight = Assets.getTextureRegion("Books:book#interiorRight").get();
+    private TextureRegion exteriorLeft = Assets.getTextureRegion("Books:book#exteriorLeft").get();
+    private TextureRegion exteriorRight = Assets.getTextureRegion("Books:book#exteriorRight").get();
+    private TextureRegion pageLeft = Assets.getTextureRegion("Books:book#pageLeft").get();
+    private TextureRegion pageRight = Assets.getTextureRegion("Books:book#pageRight").get();
 
     private State state = State.CLOSED_LEFT;
 
-    private Rect2i left = Rect2i.createFromMinAndSize(0,0,206,200);
-    private Rect2i right = Rect2i.createFromMinAndSize(206,0,206,200);
+    private Rect2i left = Rect2i.createFromMinAndSize(0, 0, 206, 200);
+    private Rect2i right = Rect2i.createFromMinAndSize(206, 0, 206, 200);
 
     private Binding<Color> tint = new DefaultBinding<>(Color.WHITE);
 
@@ -52,40 +49,39 @@ public class UIBook extends CoreWidget {
         super(id);
     }
 
-
     @Override
     public void onDraw(Canvas canvas) {
-        if(state.equals(State.CLOSED_RIGHT)) {
-            canvas.drawTexture(exterior_right, right, tint.get());
+        if (state.equals(State.CLOSED_RIGHT)) {
+            canvas.drawTexture(exteriorRight, right, tint.get());
             return;
         }
 
-        if(state.equals(State.CLOSED_LEFT)) {
-            canvas.drawTexture(exterior_left, left, tint.get());
+        if (state.equals(State.CLOSED_LEFT)) {
+            canvas.drawTexture(exteriorLeft, left, tint.get());
             return;
         }
 
-        canvas.drawTexture(interior_left, left, tint.get());
-        canvas.drawTexture(interior_right, right, tint.get());
+        canvas.drawTexture(interiorLeft, left, tint.get());
+        canvas.drawTexture(interiorRight, right, tint.get());
 
-        if(state.equals(State.OPEN_RIGHT)) {
-            canvas.drawTexture(page_right, right);
+        if (state.equals(State.OPEN_RIGHT)) {
+            canvas.drawTexture(pageRight, right);
             return;
         }
-        if(state.equals(State.OPEN_LEFT)) {
-            canvas.drawTexture(page_left, left);
+        if (state.equals(State.OPEN_LEFT)) {
+            canvas.drawTexture(pageLeft, left);
             return;
         }
 
-        canvas.drawTexture(page_left);
-        canvas.drawTexture(page_right, right);
+        canvas.drawTexture(pageLeft);
+        canvas.drawTexture(pageRight, right);
 
 
     }
 
     @Override
     public Vector2i getPreferredContentSize(Canvas canvas, Vector2i sizeHint) {
-        return new Vector2i(412,200);
+        return new Vector2i(412, 200);
     }
 
     public Color getTint() {
@@ -104,8 +100,11 @@ public class UIBook extends CoreWidget {
         this.state = state;
     }
 
-    public State getState() { return state; }
+    public State getState() {
+        return state;
+    }
 }
+
 
 enum State {
     CLOSED_LEFT,

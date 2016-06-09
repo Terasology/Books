@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Benjamin Glatzel <benjamin.glatzel@me.com>
+ * Copyright 2016 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.terasology.books.rendering.gui.windows;
+
+package org.terasology.books.rendering.nui.layers;
 
 import org.terasology.books.logic.BookComponent;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.protobuf.EntityData;
 import org.terasology.rendering.nui.BaseInteractionScreen;
-import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.WidgetUtil;
-import org.terasology.rendering.nui.widgets.UIButton;
-import org.terasology.rendering.nui.widgets.UIImage;
-
-import javax.vecmath.Vector2f;
 
 public class BookScreen extends BaseInteractionScreen {
     private BookComponent book;
@@ -47,27 +42,29 @@ public class BookScreen extends BaseInteractionScreen {
         WidgetUtil.trySubscribe(this, "forward", button -> {
             State state = gui.getState();
 
-            if(state.equals(State.CLOSED_LEFT))
+            if (state.equals(State.CLOSED_LEFT)) {
                 gui.setState(State.OPEN_LEFT);
-            else if(state.equals(State.OPEN_LEFT))
+            } else if (state.equals(State.OPEN_LEFT)) {
                 gui.setState(State.PAGES);
-            else if(state.equals(State.PAGES))
+            } else if (state.equals(State.PAGES)) {
                 gui.setState(State.OPEN_RIGHT);
-            else if(state.equals(State.OPEN_RIGHT))
+            } else if (state.equals(State.OPEN_RIGHT)) {
                 gui.setState(State.CLOSED_RIGHT);
+            }
         });
 
         WidgetUtil.trySubscribe(this, "backward", button -> {
             State state = gui.getState();
 
-            if(state.equals(State.CLOSED_RIGHT))
+            if (state.equals(State.CLOSED_RIGHT)) {
                 gui.setState(State.OPEN_RIGHT);
-            else if(state.equals(State.OPEN_RIGHT))
+            } else if (state.equals(State.OPEN_RIGHT)) {
                 gui.setState(State.PAGES);
-            else if(state.equals(State.PAGES))
+            } else if (state.equals(State.PAGES)) {
                 gui.setState(State.OPEN_LEFT);
-            else if(state.equals(State.OPEN_LEFT))
+            } else if (state.equals(State.OPEN_LEFT)) {
                 gui.setState(State.CLOSED_LEFT);
+            }
         });
     }
 }

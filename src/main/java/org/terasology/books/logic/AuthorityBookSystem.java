@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.terasology.books.logic;
 
 import org.terasology.entitySystem.entity.EntityManager;
@@ -21,16 +22,11 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.logic.common.ActivateEvent;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.registry.In;
-import org.terasology.rendering.nui.NUIManager;
 
-/**
- * Created by Jared Johnson on 6/6/2016.
- */
 @RegisterSystem(RegisterMode.AUTHORITY)
 
 public class AuthorityBookSystem extends BaseComponentSystem {
