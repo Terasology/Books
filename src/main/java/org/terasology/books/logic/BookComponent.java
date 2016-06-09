@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Benjamin Glatzel <benjamin.glatzel@me.com>
+ * Copyright 2016 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,16 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.terasology.books.logic;
 
 import org.terasology.entitySystem.Component;
 import org.terasology.rendering.nui.Color;
 
-/**
- * Books are Knowledge
- *
- * @author bi0hax
- */
+
 public class BookComponent implements Component {
     public enum BookType {
         Blank,
