@@ -15,14 +15,17 @@
  */
 package org.terasology.books.logic;
 
-import org.terasology.books.rendering.gui.windows.UIScreenBook;
-import org.terasology.entitySystem.EntityRef;
-import org.terasology.entitySystem.EventHandlerSystem;
-import org.terasology.entitySystem.ReceiveEvent;
-import org.terasology.entitySystem.RegisterComponentSystem;
-import org.terasology.events.ActivateEvent;
-import org.terasology.game.CoreRegistry;
-import org.terasology.logic.manager.GUIManager;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
+import org.terasology.entitySystem.systems.BaseComponentSystem;
+import org.terasology.entitySystem.systems.RegisterMode;
+import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.input.binds.inventory.UseItemButton;
+import org.terasology.logic.common.ActivateEvent;
+import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.registry.CoreRegistry;
+import org.terasology.registry.In;
+import org.terasology.rendering.nui.NUIManager;
 
 
 /**
@@ -30,22 +33,14 @@ import org.terasology.logic.manager.GUIManager;
  *
  * @author bi0hax
  */
-@RegisterComponentSystem
-public class ReadBookAction implements EventHandlerSystem {
+@RegisterSystem(RegisterMode.CLIENT)
 
-    public void initialise() {
-        CoreRegistry.get(GUIManager.class).registerWindow("book", UIScreenBook.class);
-    }
+public class ClientBookSystem extends BaseComponentSystem {
 
-    @Override
-    public void shutdown() {
-    }
+    @In
+    private NUIManager nuiManager;
 
-    public EntityRef entity;
-
-
-    @ReceiveEvent(components = {BookComponent.class})
+    @ReceiveEvent(components = { BookcaseComponent.class })
     public void onActivate(ActivateEvent event, EntityRef entity) {
-        CoreRegistry.get(GUIManager.class).openWindow("book");
     }
 }

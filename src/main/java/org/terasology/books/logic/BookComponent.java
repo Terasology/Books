@@ -16,6 +16,7 @@
 package org.terasology.books.logic;
 
 import org.terasology.entitySystem.Component;
+import org.terasology.rendering.nui.Color;
 
 /**
  * Books are Knowledge
@@ -29,5 +30,6 @@ public class BookComponent implements Component {
         Recipe         // Not yet implemented
     }
 
-    public BookType type;
+    public Color tint = Color.WHITE;
+    public BookType type = BookType.Blank;
 }

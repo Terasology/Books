@@ -1,11 +1,16 @@
 {
     "Item" : {
         "name" : "Book",
-        "icon" : "Book",
+        "icon" : "engine:items#brownBook",
         "usage" : "ON_USER",
         "renderWithIcon" : true
     },
-    "Book" : {
-        "type" : "WContents"
+"Book" : {
+        "type" : "WContents",
+        "tint" : [245, 222, 179, 255]
+    },
+    "InteractionTarget": {},
+    "InteractionScreen": {
+        "screen": "Books:BookScreen"
     }
 }

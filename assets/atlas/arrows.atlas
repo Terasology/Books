@@ -1,0 +1,12 @@
+{
+    "texture" : "Books:arrows",
+    "textureSize" : [18, 20],
+    "grid" : {
+        "tileSize" : [18, 10],
+        "gridDimensions" : [1, 2],
+        "tileNames" : [
+            "forward",
+            "backward"
+        ]
+    }
+}

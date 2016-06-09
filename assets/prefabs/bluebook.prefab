@@ -1,13 +1,16 @@
 {
     "Item" : {
         "name" : "BlueBook",
-        "icon" : "BlueBook",
-        "usage" : "ON_USER",
+        "icon" : "engine:items#BlueBook",
+        "usage" : "NONE",
         "renderWithIcon" : true
     },
     "Book" : {
         "type" : "WContents",
-        "page1" : "The",
-        "page2" : "BLUE!"
+        "tint" : [0, 0, 255, 255]
+    },
+    "InteractionTarget": {},
+    "InteractionScreen": {
+        "screen": "Books:BookScreen"
     }
 }
