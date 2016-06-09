@@ -1,0 +1,13 @@
+{
+    "texture" : "Books:book",
+    "textureSize" : [412, 600],
+    "grid" : {
+        "tileSize" : [206, 200],
+        "gridDimensions" : [2, 3],
+        "tileNames" : [
+            "interiorLeft", "interiorRight",
+            "exteriorLeft", "exteriorRight",
+            "pageLeft", "pageRight"
+        ]
+    }
+}

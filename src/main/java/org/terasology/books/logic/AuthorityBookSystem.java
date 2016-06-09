@@ -16,29 +16,30 @@
 
 package org.terasology.books.logic;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.terasology.entitySystem.entity.EntityManager;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.logic.inventory.InventoryComponent;
+import org.terasology.logic.inventory.InventoryManager;
+import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.registry.In;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 
-public class BookcaseSystem extends BaseComponentSystem {
-
-    private final Logger logger = LoggerFactory.getLogger(BookcaseSystem.class);
+public class AuthorityBookSystem extends BaseComponentSystem {
 
     @In
-    private EntityManager entityManager;
+    InventoryManager inventoryManager;
+    @In
+    EntityManager entityManager;
 
-    @Override
-    public void initialise() {
-    }
-
-    @Override
-    public void shutdown() {
+    @ReceiveEvent(components = InventoryComponent.class)
+    public void onPlayerSpawnedEvent(OnPlayerSpawnedEvent event, EntityRef player) {
+        inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create("Books:bluebook"));
+        inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create("Books:redbook"));
+        inventoryManager.giveItem(player, EntityRef.NULL, entityManager.create("Books:book"));
     }
 }
-

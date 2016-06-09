@@ -16,29 +16,24 @@
 
 package org.terasology.books.logic;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.terasology.entitySystem.entity.EntityManager;
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.logic.common.ActivateEvent;
 import org.terasology.registry.In;
+import org.terasology.rendering.nui.NUIManager;
 
-@RegisterSystem(RegisterMode.AUTHORITY)
 
-public class BookcaseSystem extends BaseComponentSystem {
+@RegisterSystem(RegisterMode.CLIENT)
 
-    private final Logger logger = LoggerFactory.getLogger(BookcaseSystem.class);
+public class ClientBookSystem extends BaseComponentSystem {
 
     @In
-    private EntityManager entityManager;
+    private NUIManager nuiManager;
 
-    @Override
-    public void initialise() {
-    }
-
-    @Override
-    public void shutdown() {
+    @ReceiveEvent(components = { BookcaseComponent.class })
+    public void onActivate(ActivateEvent event, EntityRef entity) {
     }
 }
-

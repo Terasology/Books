@@ -1,11 +1,16 @@
 {
     "Item" : {
         "name" : "RedBook",
-        "icon" : "RedBook",
+        "icon" : "engine:items#RedBook",
         "usage" : "ON_USER",
         "renderWithIcon" : true
     },
     "Book" : {
-        "type" : "WContents"
+        "type" : "WContents",
+        "tint" : [255, 0, 0, 255]
+    },
+    "InteractionTarget": {},
+    "InteractionScreen": {
+        "screen": "Books:BookScreen"
     }
 }

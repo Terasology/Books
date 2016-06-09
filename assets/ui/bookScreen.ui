@@ -1,0 +1,34 @@
+{
+    "type" : "bookScreen",
+    "skin" : "bookScreen",
+    "contents" : {
+        "type" : "relativeLayout",
+        "contents" : [
+            {
+                "type" : "columnLayout",
+                "contents" : [
+                    {
+                        "type" : "UIBook",
+                        "id" : "book"
+                    },
+                    {
+                        "type" : "UIButton",
+                        "id" : "forward",
+                        "image" : "Books:arrows#forward"
+                    },
+                    {
+                        "type" : "UIButton",
+                        "id" : "backward",
+                        "image" : "Books:arrows#backward"
+                    }
+                ],
+                "layoutInfo" : {
+                    "use-content-width" : true,
+                    "use-content-height" : true,
+                    "position-horizontal-center" : {},
+                    "position-vertical-center" : {}
+                }
+            }
+        ]
+    }
+}
