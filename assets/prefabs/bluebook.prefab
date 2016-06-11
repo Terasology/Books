@@ -6,7 +6,7 @@
         "renderWithIcon" : true
     },
     "Book" : {
-        "type" : "WContents",
+        "pages" : ["This is a", "blue book!"],
         "tint" : [0, 0, 255, 255]
     },
     "InteractionTarget": {},

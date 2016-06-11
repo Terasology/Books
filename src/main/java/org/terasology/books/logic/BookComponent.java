@@ -16,8 +16,12 @@
 
 package org.terasology.books.logic;
 
+import com.google.common.collect.Lists;
 import org.terasology.entitySystem.Component;
 import org.terasology.rendering.nui.Color;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class BookComponent implements Component {
@@ -29,4 +33,5 @@ public class BookComponent implements Component {
 
     public Color tint = Color.WHITE;
     public BookType type = BookType.Blank;
+    public List<String> pages = new ArrayList<>(Lists.newArrayList(""));
 }

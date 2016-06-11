@@ -35,7 +35,7 @@ public class UIBook extends CoreWidget {
     private TextureRegion pageLeft = Assets.getTextureRegion("Books:book#pageLeft").get();
     private TextureRegion pageRight = Assets.getTextureRegion("Books:book#pageRight").get();
 
-    private State state = State.CLOSED_LEFT;
+    private Binding<State> state = new DefaultBinding<>(State.PAGES);
 
     private Rect2i left = Rect2i.createFromMinAndSize(0, 0, 206, 200);
     private Rect2i right = Rect2i.createFromMinAndSize(206, 0, 206, 200);
@@ -45,18 +45,14 @@ public class UIBook extends CoreWidget {
     public UIBook() {
     }
 
-    public UIBook(String id) {
-        super(id);
-    }
-
     @Override
     public void onDraw(Canvas canvas) {
-        if (state.equals(State.CLOSED_RIGHT)) {
+        if (getState().equals(State.CLOSED_RIGHT)) {
             canvas.drawTexture(exteriorRight, right, tint.get());
             return;
         }
 
-        if (state.equals(State.CLOSED_LEFT)) {
+        if (getState().equals(State.CLOSED_LEFT)) {
             canvas.drawTexture(exteriorLeft, left, tint.get());
             return;
         }
@@ -64,11 +60,11 @@ public class UIBook extends CoreWidget {
         canvas.drawTexture(interiorLeft, left, tint.get());
         canvas.drawTexture(interiorRight, right, tint.get());
 
-        if (state.equals(State.OPEN_RIGHT)) {
+        if (getState().equals(State.OPEN_RIGHT)) {
             canvas.drawTexture(pageRight, right);
             return;
         }
-        if (state.equals(State.OPEN_LEFT)) {
+        if (getState().equals(State.OPEN_LEFT)) {
             canvas.drawTexture(pageLeft, left);
             return;
         }
@@ -97,11 +93,15 @@ public class UIBook extends CoreWidget {
     }
 
     public void setState(State state) {
-        this.state = state;
+        this.state.set(state);
     }
 
     public State getState() {
-        return state;
+        return state.get();
+    }
+
+    public void bindState(Binding<State> stateBinding) {
+        this.state = stateBinding;
     }
 }
 

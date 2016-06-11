@@ -20,51 +20,81 @@ import org.terasology.books.logic.BookComponent;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.rendering.nui.BaseInteractionScreen;
 import org.terasology.rendering.nui.WidgetUtil;
+import org.terasology.rendering.nui.databinding.Binding;
+import org.terasology.rendering.nui.databinding.DefaultBinding;
+import org.terasology.rendering.nui.widgets.UIText;
 
 public class BookScreen extends BaseInteractionScreen {
     private BookComponent book;
     private UIBook gui;
+    private UIText text;
+
+    private Binding<Integer> index;
+    private Binding<State> state;
 
     public BookScreen() {
-
     }
 
     @Override
     public void initialise() {
+        index = new Binding<Integer>() {
+            private Integer index = -2;
+
+            @Override
+            public Integer get() {
+                return index;
+            }
+
+            @Override
+            public void set(Integer value) {
+                if ((value >= -2) && (value <= book.pages.size()))
+                    index = value;
+                else if (index < -2)
+                    index = -2;
+                else if (index > book.pages.size())
+                    index = book.pages.size();
+            }
+        };
+
+        state = new Binding<State>() {
+            @Override
+            public State get() {
+                int i = index.get();
+
+                if (i == -2)
+                    return State.CLOSED_RIGHT;
+                if (i == -1)
+                    return State.OPEN_RIGHT;
+                if (i == book.pages.size()-1)
+                    return State.OPEN_LEFT;
+                if (i == book.pages.size())
+                    return State.CLOSED_LEFT;
+                return State.PAGES;
+            }
+
+            @Override
+            public void set(State value) {
+
+            }
+        };
+
+
         gui = find("book", UIBook.class);
 
+        WidgetUtil.trySubscribe(this, "forward", button -> { setPage(index.get() + 1); });
+
+        WidgetUtil.trySubscribe(this, "backward", button -> { setPage(index.get() - 1); });
     }
 
     @Override
     protected void initializeWithInteractionTarget(EntityRef interactionTarget) {
-        gui.setTint(interactionTarget.getComponent(BookComponent.class).tint);
+        book = interactionTarget.getComponent(BookComponent.class);
+        gui.setTint(book.tint);
+        gui.bindState(state);
+    }
 
-        WidgetUtil.trySubscribe(this, "forward", button -> {
-            State state = gui.getState();
+    public void setPage(int page) {
+        index.set(page);
 
-            if (state.equals(State.CLOSED_LEFT)) {
-                gui.setState(State.OPEN_LEFT);
-            } else if (state.equals(State.OPEN_LEFT)) {
-                gui.setState(State.PAGES);
-            } else if (state.equals(State.PAGES)) {
-                gui.setState(State.OPEN_RIGHT);
-            } else if (state.equals(State.OPEN_RIGHT)) {
-                gui.setState(State.CLOSED_RIGHT);
-            }
-        });
-
-        WidgetUtil.trySubscribe(this, "backward", button -> {
-            State state = gui.getState();
-
-            if (state.equals(State.CLOSED_RIGHT)) {
-                gui.setState(State.OPEN_RIGHT);
-            } else if (state.equals(State.OPEN_RIGHT)) {
-                gui.setState(State.PAGES);
-            } else if (state.equals(State.PAGES)) {
-                gui.setState(State.OPEN_LEFT);
-            } else if (state.equals(State.OPEN_LEFT)) {
-                gui.setState(State.CLOSED_LEFT);
-            }
-        });
     }
 }
