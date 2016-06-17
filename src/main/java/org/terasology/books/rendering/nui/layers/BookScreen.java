@@ -16,6 +16,8 @@
 
 package org.terasology.books.rendering.nui.layers;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.terasology.books.logic.BookComponent;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.rendering.nui.BaseInteractionScreen;
@@ -25,9 +27,11 @@ import org.terasology.rendering.nui.databinding.DefaultBinding;
 import org.terasology.rendering.nui.widgets.UIText;
 
 public class BookScreen extends BaseInteractionScreen {
+    private final Logger logger = LoggerFactory.getLogger(BookScreen.class);
+
     private BookComponent book;
-    private UIBook gui;
-    private UIText text;
+    //private UIBook gui;
+    //private UIText text;
 
     private Binding<Integer> index;
     private Binding<State> state;
@@ -79,9 +83,10 @@ public class BookScreen extends BaseInteractionScreen {
         };
 
 
-        gui = find("book", UIBook.class);
+        //gui = find("book", UIBook.class);
 
-        WidgetUtil.trySubscribe(this, "forward", button -> { setPage(index.get() + 1); });
+        WidgetUtil.trySubscribe(this, "forward", button -> { setPage(index.get() + 1);
+            });
 
         WidgetUtil.trySubscribe(this, "backward", button -> { setPage(index.get() - 1); });
     }
@@ -89,8 +94,8 @@ public class BookScreen extends BaseInteractionScreen {
     @Override
     protected void initializeWithInteractionTarget(EntityRef interactionTarget) {
         book = interactionTarget.getComponent(BookComponent.class);
-        gui.setTint(book.tint);
-        gui.bindState(state);
+        //gui.setTint(book.tint);
+        //gui.bindState(state);
     }
 
     public void setPage(int page) {

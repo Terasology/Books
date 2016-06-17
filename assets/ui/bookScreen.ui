@@ -6,24 +6,40 @@
         "contents" : [
             {
                 "type" : "columnLayout",
-                "contents" : [
+                "contents": [
                     {
-                        "type" : "UIBook",
-                        "id" : "book"
+                        "type" : "rowLayout",
+                        "contents" : [
+                            {
+                                "type" : "UIImage",
+                                "id" : "coverLeft",
+                                "image" : "Books:book#exteriorRight"
+                            },
+                            {
+                                "type" : "UIImage",
+                                "id" : "coverRight",
+                                "image" : "Books:book#exteriorRight"
+                            }
+                        ]
                     },
                     {
-                        "type" : "UIButton",
-                        "id" : "forward",
-                        "image" : "Books:arrows#forward"
-                    },
-                    {
-                        "type" : "UIButton",
-                        "id" : "backward",
-                        "image" : "Books:arrows#backward"
+                        "type" : "rowLayout",
+                        "contents" : [
+                            {
+                                "type" : "UIButton",
+                                "id" : "backward",
+                                "image" : "Books:arrows#backward"
+                            },
+                            {
+                                "type" : "UIButton",
+                                "id" : "forward",
+                                "image" : "Books:arrows#forward"
+                            }
+                        ]
                     }
                 ],
                 "layoutInfo" : {
-                    "use-content-width" : true,
+                    "width" : 412,
                     "use-content-height" : true,
                     "position-horizontal-center" : {},
                     "position-vertical-center" : {}

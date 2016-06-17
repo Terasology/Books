@@ -27,11 +27,12 @@ import java.util.List;
 public class BookComponent implements Component {
     public enum BookType {
         Blank,
-        WContents,
-        Recipe         // Not yet implemented
+        Written,
+        Picture
     }
-
+	
     public Color tint = Color.WHITE;
     public BookType type = BookType.Blank;
     public List<String> pages = new ArrayList<>(Lists.newArrayList(""));
 }
+

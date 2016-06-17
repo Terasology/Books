@@ -28,12 +28,12 @@ import org.terasology.utilities.Assets;
 
 
 public class UIBook extends CoreWidget {
-    private TextureRegion interiorLeft = Assets.getTextureRegion("Books:book#interiorLeft").get();
-    private TextureRegion interiorRight = Assets.getTextureRegion("Books:book#interiorRight").get();
-    private TextureRegion exteriorLeft = Assets.getTextureRegion("Books:book#exteriorLeft").get();
-    private TextureRegion exteriorRight = Assets.getTextureRegion("Books:book#exteriorRight").get();
-    private TextureRegion pageLeft = Assets.getTextureRegion("Books:book#pageLeft").get();
-    private TextureRegion pageRight = Assets.getTextureRegion("Books:book#pageRight").get();
+    private Binding<TextureRegion> interiorLeft = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorLeft").get());
+    private Binding<TextureRegion> interiorRight = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorRight").get());
+    private Binding<TextureRegion> exteriorLeft = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorLeft").get());
+    private Binding<TextureRegion> exteriorRight = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorRight").get());
+    private Binding<TextureRegion> pageLeft = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageLeft").get());
+    private Binding<TextureRegion> pageRight = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageRight").get());
 
     private Binding<State> state = new DefaultBinding<>(State.PAGES);
 
@@ -48,31 +48,22 @@ public class UIBook extends CoreWidget {
     @Override
     public void onDraw(Canvas canvas) {
         if (getState().equals(State.CLOSED_RIGHT)) {
-            canvas.drawTexture(exteriorRight, right, tint.get());
-            return;
+            canvas.drawTexture(exteriorRight.get(), right, tint.get());
+        } else if (getState().equals(State.CLOSED_LEFT)) {
+            canvas.drawTexture(exteriorLeft.get(), left, tint.get());
+        } else {
+            canvas.drawTexture(interiorLeft.get(), left, tint.get());
+            canvas.drawTexture(interiorRight.get(), right, tint.get());
+
+            if (getState().equals(State.OPEN_RIGHT)) {
+                canvas.drawTexture(pageRight.get(), right);
+            } else if (getState().equals(State.OPEN_LEFT)) {
+                canvas.drawTexture(pageLeft.get(), left);
+            } else {
+                canvas.drawTexture(pageLeft.get(), left);
+                canvas.drawTexture(pageRight.get(), right);
+            }
         }
-
-        if (getState().equals(State.CLOSED_LEFT)) {
-            canvas.drawTexture(exteriorLeft, left, tint.get());
-            return;
-        }
-
-        canvas.drawTexture(interiorLeft, left, tint.get());
-        canvas.drawTexture(interiorRight, right, tint.get());
-
-        if (getState().equals(State.OPEN_RIGHT)) {
-            canvas.drawTexture(pageRight, right);
-            return;
-        }
-        if (getState().equals(State.OPEN_LEFT)) {
-            canvas.drawTexture(pageLeft, left);
-            return;
-        }
-
-        canvas.drawTexture(pageLeft);
-        canvas.drawTexture(pageRight, right);
-
-
     }
 
     @Override
