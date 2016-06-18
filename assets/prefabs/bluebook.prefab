@@ -9,7 +9,7 @@
         "pages" : ["This is a",
                    "blue book ",
                    "and I like burritos.",
-				   "Derp"],
+                   "Derp"],
         "tint" : [0, 0, 255, 255]
     },
     "InteractionTarget": {},

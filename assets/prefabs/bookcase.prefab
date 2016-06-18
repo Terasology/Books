@@ -9,7 +9,7 @@
   "AccessInventoryAction": {},
 
   "PlaySoundAction" : {
-    sounds = "click"
+    "sounds": "click"
   },
 
   "Health" : {
