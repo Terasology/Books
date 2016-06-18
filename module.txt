@@ -1,11 +1,11 @@
 {
     "id" : "Books",
-    "version" : "0.1.0",
+    "version" : "1.0.0",
     "author" : "bi0hax",
     "displayName" : "Books and Bookcases",
     "description" : "This module introduces books and bookcases",
     "dependencies" : [
-        {"id": "Core", "minVersion": "1.0.0"}
+        {"id": "engine", "minVersion": "1.0.0"}
     ],
     "isServerSideOnly" : false
 }

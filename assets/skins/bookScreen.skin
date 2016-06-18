@@ -1,3 +1,10 @@
 {
-    "inherit" : "default"
+    "inherit" : "default",
+    "font" : "Books:default",
+    "text-shadowed" : false,
+    "elements" : {
+        "UILabel" : {
+            "text-align-horizontal" : "LEFT"
+        }
+    }
 }

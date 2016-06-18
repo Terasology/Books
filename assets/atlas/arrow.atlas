@@ -1,5 +1,5 @@
 {
-    "texture" : "Books:arrows",
+    "texture" : "Books:arrow",
     "textureSize" : [18, 20],
     "grid" : {
         "tileSize" : [18, 10],

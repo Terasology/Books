@@ -1,49 +1,94 @@
 {
-    "type" : "bookScreen",
+    "type" : "BookScreen",
     "skin" : "bookScreen",
     "contents" : {
         "type" : "relativeLayout",
         "contents" : [
             {
-                "type" : "columnLayout",
-                "contents": [
-                    {
-                        "type" : "rowLayout",
-                        "contents" : [
-                            {
-                                "type" : "UIImage",
-                                "id" : "coverLeft",
-                                "image" : "Books:book#exteriorRight"
-                            },
-                            {
-                                "type" : "UIImage",
-                                "id" : "coverRight",
-                                "image" : "Books:book#exteriorRight"
-                            }
-                        ]
-                    },
-                    {
-                        "type" : "rowLayout",
-                        "contents" : [
-                            {
-                                "type" : "UIButton",
-                                "id" : "backward",
-                                "image" : "Books:arrows#backward"
-                            },
-                            {
-                                "type" : "UIButton",
-                                "id" : "forward",
-                                "image" : "Books:arrows#forward"
-                            }
-                        ]
-                    }
-                ],
+                "type" : "rowLayout",
+                "id" : "row",
                 "layoutInfo" : {
                     "width" : 412,
                     "use-content-height" : true,
                     "position-horizontal-center" : {},
                     "position-vertical-center" : {}
+                },
+                "contents": [
+                    {
+                        "type" : "UIImage",
+                        "id" : "coverLeft",
+                        "image" : "Books:book#exteriorLeft"
+                    },
+                    {
+                        "type" : "UIImage",
+                        "id" : "coverRight",
+                        "image" : "Books:book#exteriorRight"
+                    },
+                ]
+            },
+            {
+                "type" : "UIImage",
+                "id" : "pageLeft",
+                "layoutInfo" : {
+                    "width" : 206,
+                    "height" : 200,
+                    "position-left" : { "widget" : "row" },
+                    "position-vertical-center" : { "widget" : "row" }
+                },
+                "image" : "Books:book#pageLeft"
+            },
+            {
+                "type" : "UIImage",
+                "id" : "pageRight",
+                "layoutInfo" : {
+                    "width" : 206,
+                    "height" : 200,
+                    "position-right" : { "widget" : "row" },
+                    "position-vertical-center" : { "widget" : "row" }
+                },
+                 "image" : "Books:book#pageRight"
+            },
+            {
+                "type" : "UILabel",
+                "id" : "textLeft",
+                "layoutInfo" : {
+                    "width" : 174,
+                    "height" : 168,
+                    "position-left" : { "widget" : "row", "offset" : 20 },
+                    "position-top" : { "widget" : "row", "offset" : 13 }
                 }
+            },
+            {
+                "type" : "UILabel",
+                "id" : "textRight",
+                "layoutInfo" : {
+                    "width" : 174,
+                    "height" : 168,
+                    "position-right" : { "widget" : "row", "offset" : 20 },
+                    "position-top" : { "widget" : "row", "offset" : 13 }
+                }
+            },
+            {
+                "type" : "UIButton",
+                "id" : "backward",
+                "layoutInfo" : {
+                    "width" : 60,
+                    "height" : 27,
+                    "position-left" : { "widget" : "row" },
+                    "position-bottom" : { "widget" : "row", "offset" : -27 }
+                },
+                "image" : "Books:arrow#backward"
+            },
+            {
+                "type" : "UIButton",
+                "id" : "forward",
+                "layoutInfo" : {
+                    "width" : 60,
+                    "height" : 27,
+                    "position-right" : { "widget" : "row" },
+                    "position-bottom" : { "widget" : "row", "offset" : -27 }
+                },
+                "image" : "Books:arrow#forward"
             }
         ]
     }

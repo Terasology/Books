@@ -6,7 +6,6 @@
         "renderWithIcon" : true
     },
 "Book" : {
-        "type" : "WContents",
         "tint" : [245, 222, 179, 255]
     },
     "InteractionTarget": {},
