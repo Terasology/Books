@@ -120,10 +120,15 @@ public class BookScreen extends BaseInteractionScreen {
         });
 
         WidgetUtil.trySubscribe(this, "backward", button -> {
-            index.set(index.get() - 1);
             backward();
             updatePage();
         });
+    }
+
+    @Override
+    public void onClosed() {
+        super.onClosed();
+        index.set(-1);
     }
 
     @Override
