@@ -13,30 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.terasology.books.logic;
 
-import com.google.common.collect.Lists;
 import org.terasology.entitySystem.Component;
-import org.terasology.rendering.nui.Color;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
-public class BookComponent implements Component {
-    public enum BookType {
-        Written,
-        Picture
-    }
-
-    public Color tint = Color.WHITE;
-    public BookType type = BookType.Written;
-
-    public boolean readOnly;
-    public String title;
-
-    //The list of page's length must be even or thing will explode.
-    public List<String> pages = new ArrayList<>(Lists.newArrayList("", ""));
+/**
+ * Items containing this component give the player the ability to edit books
+ */
+public class EditBooksComponent implements Component {
 }
-

@@ -1,16 +1,19 @@
 {
+    "parent" : "engine:iconItem",
     "Item" : {
-        "name" : "BlueBook",
         "icon" : "engine:items#BlueBook",
-        "usage" : "NONE",
-        "renderWithIcon" : true
+        "usage" : "NONE"
+    },
+    "DisplayName" : {
+        "name" : "Blue Book"
     },
     "Book" : {
         "pages" : ["This is a",
                    "blue book ",
                    "and I like burritos.",
                    "Derp"],
-        "tint" : [0, 0, 255, 255]
+        "tint" : [0, 0, 255, 255],
+        "title" : "A Blue Book"
     },
     "InteractionTarget": {},
     "InteractionScreen": {

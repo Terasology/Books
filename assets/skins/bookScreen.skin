@@ -4,7 +4,15 @@
     "text-shadowed" : false,
     "elements" : {
         "UILabel" : {
-            "text-align-horizontal" : "LEFT"
+            "text-align-horizontal" : "center",
+            "font": "NotoSans-Regular"
+        },
+        "UIText" : {
+            "text-align-horizontal": "left",
+            "background": "Books:blank"
+        },
+        "UIButton" : {
+            "font": "NotoSans-Regular"
         }
     }
 }

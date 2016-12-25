@@ -23,7 +23,7 @@
                         "type" : "UIImage",
                         "id" : "coverRight",
                         "image" : "Books:book#exteriorRight"
-                    },
+                    }
                 ]
             },
             {
@@ -49,7 +49,8 @@
                  "image" : "Books:book#pageRight"
             },
             {
-                "type" : "UILabel",
+                "type" : "UIText",
+                "multiline": true,
                 "id" : "textLeft",
                 "layoutInfo" : {
                     "width" : 174,
@@ -59,7 +60,8 @@
                 }
             },
             {
-                "type" : "UILabel",
+                "type" : "UIText",
+                "multiline": true,
                 "id" : "textRight",
                 "layoutInfo" : {
                     "width" : 174,
@@ -89,6 +91,84 @@
                     "position-bottom" : { "widget" : "row", "offset" : -27 }
                 },
                 "image" : "Books:arrow#forward"
+            },
+            {
+                "type" : "rowLayout",
+                "id" : "actionRow",
+                "layoutInfo" : {
+                    "width" : 210,
+                    "height": 27,
+                    "use-content-height" : true,
+                    "position-horizontal-center" : {},
+                    "position-bottom": { "widget" : "row", "offset" : -27 }
+                },
+                "contents": [
+                    {
+                        "type" : "UIButton",
+                        "id" : "save",
+                        "text": "Save"
+                    },
+                    {
+                        "type" : "UIButton",
+                        "id" : "copy",
+                        "text": "Copy"
+                    },
+                    {
+                        "type" : "UIButton",
+                        "id" : "cancel",
+                        "text": "Cancel"
+                    }
+                ]
+            },
+            {
+                "type" : "rowLayout",
+                "horizontalSpacing" : 12,
+                "id" : "pageActionRow",
+                "layoutInfo" : {
+                    "width" : 290,
+                    "height": 27,
+                    "use-content-height" : true,
+                    "position-horizontal-center" : {},
+                    "position-top": { "widget" : "row", "offset" : -27 }
+                },
+                "contents": [
+                    {
+                        "type" : "UIButton",
+                        "id" : "deleteLeft",
+                        "text": "Delete"
+                    },
+                    {
+                        "type" : "UIButton",
+                        "id" : "addPage",
+                        "text":"Add"
+                    },
+                    {
+                        "type" : "UIButton",
+                        "id" : "deleteRight",
+                        "text":"Delete"
+                    }
+                ]
+            },
+            {
+                "type": "ColumnLayout",
+                "columns": 1,
+                "verticalSpacing": 70,
+                "contents": [
+                    {
+                        "type": "UILabel",
+                        "id": "status"
+                    },
+                    {
+                        "type": "UILabel",
+                        "id": "title"
+                    }
+                ],
+                "layoutInfo": {
+                    "use-content-height": true,
+                    "width": 206,
+                    "position-left" : { "widget" : "row", "offset" : 206 },
+                    "position-top" : { "widget" : "row", "offset" : -25 }
+                }
             }
         ]
     }

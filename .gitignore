@@ -1,3 +1,14 @@
-# Simple stuff modules should ignore
-*.iml
 build.gradle
+
+# IntelliJ
+*.iml
+
+# Eclipse
+.checkstyle
+.classpath
+.project
+.settings
+bin/
+build/
+
+.DS_Store

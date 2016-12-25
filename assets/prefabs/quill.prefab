@@ -1,0 +1,12 @@
+{
+    "parent" : "engine:iconItem",
+    "Item" : {
+        "icon" : "Books:quill"
+    },
+    "DisplayName" : {
+        "name" : "Quill Pen",
+        "description" : "A writing implement made from the feathers of birds."
+    },
+    "EditBooks": {
+    }
+}

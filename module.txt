@@ -4,6 +4,11 @@
     "author" : "bi0hax, Waterpicker",
     "displayName" : "Books and Bookcases",
     "description" : "This module introduces books and bookcases",
-    "dependencies" : [],
+    "dependencies" : [
+            {
+                "id" : "Core",
+                "minVersion" : "1.0.0"
+            }
+    ],
     "isServerSideOnly" : false
 }
