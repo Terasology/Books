@@ -41,9 +41,14 @@ import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.rendering.nui.widgets.UIText;
 import org.terasology.utilities.Assets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookScreen extends BaseInteractionScreen {
+    private static final String STATUS_EDITING = "Editing";
+    private static final String STATUS_READING = "Reading";
+    private static final String STATUS_READ_ONLY = "Read-only";
+
     private final Logger logger = LoggerFactory.getLogger(BookScreen.class);
 
     @In
@@ -60,8 +65,7 @@ public class BookScreen extends BaseInteractionScreen {
     private BookComponent book;
     private EntityRef bookEntity;
     private List<String> pages;
-    private String statusText;
-    private boolean editBook;
+    private String status;
 
     private UIImage coverLeft;
     private UIImage coverRight;
@@ -78,7 +82,7 @@ public class BookScreen extends BaseInteractionScreen {
     private UIButton deleteLeft;
     private UIButton deleteRight;
     private UIButton addPage;
-    private UILabel status;
+    private UILabel statusText;
     private UILabel title;
 
     private Binding<TextureRegion> coverBackL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorLeft").get());
@@ -133,7 +137,7 @@ public class BookScreen extends BaseInteractionScreen {
         deleteLeft = find("deleteLeft", UIButton.class);
         addPage = find("addPage", UIButton.class);
         deleteRight = find("deleteRight", UIButton.class);
-        status = find("status", UILabel.class);
+        statusText = find("status", UILabel.class);
 
         WidgetUtil.trySubscribe(this, "forward", button -> {
             updateEdits();
@@ -149,16 +153,12 @@ public class BookScreen extends BaseInteractionScreen {
             updatePage();
         });
 
-        cancel.subscribe(button -> {
-            pages = book.pages;
-            bookEntity.saveComponent(book);
-            nuiManager.closeScreen(this);
-        });
+        cancel.subscribe(button -> nuiManager.closeScreen(this));
 
         save.subscribe(button -> {
             updateEdits();
             if (pages != null) {
-                book.pages = pages;
+                book.pages = new ArrayList<String>(pages);
             }
             bookEntity.saveComponent(book);
             nuiManager.closeScreen(this);
@@ -173,7 +173,7 @@ public class BookScreen extends BaseInteractionScreen {
                 pages.remove(index.get() - 1);
                 pages.remove(index.get() - 1);
             }
-            index.set(index.get() - 2 >= 0 ? index.get() - 2 : index.get() - 1);
+            index.set(Math.max(index.get() - 2, 0));
             updateEditingControls();
             updatePage();
         });
@@ -225,7 +225,7 @@ public class BookScreen extends BaseInteractionScreen {
         book = interactionTarget.getComponent(BookComponent.class);
         setTint(book.tint);
 
-        pages = book.pages;
+        pages = new ArrayList<>(book.pages);
 
         initEditingControls();
         updateEditingControls();
@@ -233,7 +233,7 @@ public class BookScreen extends BaseInteractionScreen {
     }
 
     private void initEditingControls() {
-        editBook = false;
+        boolean editBook = false;
         setEditable(false);
 
         //check for item in inventory
@@ -244,11 +244,11 @@ public class BookScreen extends BaseInteractionScreen {
             }
         }
         if (editBook && !book.readOnly) {
-            statusText = "Editing";
+            status = STATUS_EDITING;
         } else if (editBook && book.readOnly) {
-            statusText = "Read-only";
+            status = STATUS_READ_ONLY;
         } else {
-            statusText = "Reading";
+            status = STATUS_READING;
         }
     }
 
@@ -324,36 +324,32 @@ public class BookScreen extends BaseInteractionScreen {
     }
 
     private void updateEditingControls() {
-        if (editBook) {
-            if (getState().equals(State.CLOSED_RIGHT) || getState().equals(State.CLOSED_LEFT)) {
-                setEditable(false);
-            } else {
-                setEditable(true);
-            }
+        if (status.equals(STATUS_EDITING)) {
+            setEditable(true);
             if (getState().equals(State.OPEN_RIGHT)) {
                 textLeft.setReadOnly(true);
             } else if (getState().equals(State.OPEN_LEFT)) {
                 textRight.setReadOnly(true);
             }
-
             if (getState().equals(State.OPEN_RIGHT)) {
                 deleteLeft.setVisible(false);
             } else if (getState().equals(State.OPEN_LEFT)) {
                 deleteRight.setVisible(false);
             } else if (getState().equals(State.CLOSED_LEFT) || getState().equals(State.CLOSED_RIGHT)) {
-                deleteRight.setVisible(false);
-                deleteLeft.setVisible(false);
-                addPage.setVisible(false);
+                setEditable(false);
             }
             if (pages.size() <= 2) {
                 deleteRight.setVisible(false);
                 deleteLeft.setVisible(false);
             }
-        }
-        if (getState().equals(State.CLOSED_RIGHT)) {
-            status.setText(statusText);
         } else {
-            status.setText("");
+            setEditable(false);
+        }
+
+        if (getState().equals(State.CLOSED_RIGHT)) {
+            statusText.setText(status);
+        } else {
+            statusText.setText("");
         }
     }
 
