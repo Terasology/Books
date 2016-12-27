@@ -19,7 +19,5 @@ package org.terasology.books.logic;
 import org.terasology.entitySystem.Component;
 
 public class BookcaseComponent implements Component {
-    public BookcaseComponent() {
-    }
 }
 

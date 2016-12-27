@@ -16,29 +16,13 @@
 
 package org.terasology.books.logic;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
-import org.terasology.registry.In;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 
+// TODO: Reimplement some legacy code. We had book item filtering (no non-books) and books being dropped on bookcase "death"
 public class BookcaseSystem extends BaseComponentSystem {
-
-    private final Logger logger = LoggerFactory.getLogger(BookcaseSystem.class);
-
-    @In
-    private EntityManager entityManager;
-
-    @Override
-    public void initialise() {
-    }
-
-    @Override
-    public void shutdown() {
-    }
 }
 

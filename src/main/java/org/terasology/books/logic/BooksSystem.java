@@ -43,10 +43,6 @@ public class BooksSystem extends BaseComponentSystem {
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
         BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
 
-        for (int i = 0; i < inventoryManager.getNumSlots(player); i++) {
-            EntityRef itemInSlot = inventoryManager.getItemInSlot(player, i);
-            inventoryManager.removeItem(player, null, itemInSlot, true);
-        }
         inventoryManager.giveItem(player, null, blockFactory.newInstance(blockManager.getBlockFamily("Books:bookcase"), 16), 7);
         inventoryManager.giveItem(player, null, entityManager.create("Books:bluebook"), 8);
         inventoryManager.giveItem(player, null, entityManager.create("Books:quill"), 9);
