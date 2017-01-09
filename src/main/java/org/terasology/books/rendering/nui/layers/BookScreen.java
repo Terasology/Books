@@ -44,6 +44,9 @@ import org.terasology.utilities.Assets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A Screen class that displays a book.
+ */
 public class BookScreen extends BaseInteractionScreen {
     private static final String STATUS_EDITING = "Editing";
     private static final String STATUS_READING = "Reading";
@@ -217,7 +220,7 @@ public class BookScreen extends BaseInteractionScreen {
     }
 
     /**
-     * Sets the index to the default value by setting it to -1.
+     * Sets the index to the default value.
      */
     @Override
     public void onClosed() {
@@ -260,7 +263,8 @@ public class BookScreen extends BaseInteractionScreen {
 
     /**
      * Sets the tint ({@link Color}) of the book's cover.
-     **/
+     * @param color The color which the book cover should have.
+     */
     public void setTint(Color color) {
         coverLeft.setTint(color);
         coverRight.setTint(color);
