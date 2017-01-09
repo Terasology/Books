@@ -103,7 +103,7 @@ public class BookScreen extends BaseInteractionScreen {
 
     /**
      * This method initializes the class by setting the widget-related fields. Also adds the required listeners.
-     **/
+     */
     @Override
     public void initialise() {
         // index will always be that of the left page when State.PAGES
@@ -220,7 +220,7 @@ public class BookScreen extends BaseInteractionScreen {
     }
 
     /**
-     * Sets the index to the default value.
+     * Sets the index to the default value. This ensures the book will open on the default page.
      */
     @Override
     public void onClosed() {
