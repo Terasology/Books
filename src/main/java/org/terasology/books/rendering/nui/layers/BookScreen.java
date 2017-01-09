@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A Screen class that displays a book.
+ * A Screen class that displays a book. The book is optionally editable, has pages which can be switched and there is a title.
  */
 public class BookScreen extends BaseInteractionScreen {
     private static final String STATUS_EDITING = "Editing";
