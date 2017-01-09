@@ -44,6 +44,9 @@ import org.terasology.utilities.Assets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A Screen class that displays a book. The book is optionally editable, has pages which can be switched and there is a title.
+ */
 public class BookScreen extends BaseInteractionScreen {
     private static final String STATUS_EDITING = "Editing";
     private static final String STATUS_READING = "Reading";
@@ -98,6 +101,9 @@ public class BookScreen extends BaseInteractionScreen {
     public BookScreen() {
     }
 
+    /**
+     * This method initializes the class by setting the widget-related fields. Also adds the required listeners.
+     */
     @Override
     public void initialise() {
         // index will always be that of the left page when State.PAGES
@@ -213,6 +219,9 @@ public class BookScreen extends BaseInteractionScreen {
         });
     }
 
+    /**
+     * Sets the index to the default value. This ensures the book will open on the default page.
+     */
     @Override
     public void onClosed() {
         super.onClosed();
@@ -252,6 +261,10 @@ public class BookScreen extends BaseInteractionScreen {
         }
     }
 
+    /**
+     * Sets the tint ({@link Color}) of the book's cover.
+     * @param color The color which the book cover should have.
+     */
     public void setTint(Color color) {
         coverLeft.setTint(color);
         coverRight.setTint(color);
@@ -442,6 +455,9 @@ public class BookScreen extends BaseInteractionScreen {
     }
 }
 
+/**
+ * A simple enumeration containing different states the book can be in.
+ */
 enum State {
     CLOSED_LEFT,
     OPEN_LEFT,
