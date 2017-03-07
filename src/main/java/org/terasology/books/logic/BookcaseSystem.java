@@ -34,8 +34,8 @@ public class BookcaseSystem extends BaseComponentSystem {
      * @param entity
      */
     @ReceiveEvent
-    public void filterBook(BeforeItemPutInInventory event, EntityRef entity) {
-        if (entity.hasComponent(BookcaseComponent.class) && !event.getItem().hasComponent(BookComponent.class)) {
+    public void filterBook(BeforeItemPutInInventory event, EntityRef entity, BookcaseComponent bookcaseComponent) {
+        if (!event.getItem().hasComponent(BookComponent.class)) {
             event.consume();
         }
     }
