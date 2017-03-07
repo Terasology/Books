@@ -16,13 +16,37 @@
 
 package org.terasology.books.logic;
 
+import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.logic.inventory.InventoryComponent;
+import org.terasology.logic.inventory.events.DropItemEvent;
+import org.terasology.logic.location.LocationComponent;
+import org.terasology.math.geom.Vector3f;
+import org.terasology.world.block.entity.CreateBlockDropsEvent;
+
+import java.util.List;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 
 // TODO: Reimplement some legacy code. We had book item filtering (no non-books) and books being dropped on bookcase "death"
 public class BookcaseSystem extends BaseComponentSystem {
+
+    @ReceiveEvent
+    public void onDestroyBookCase(CreateBlockDropsEvent event, EntityRef entity, BookcaseComponent bookcaseComponent) {
+        if (entity.hasComponent(InventoryComponent.class)) {
+            Vector3f location = entity.getComponent(LocationComponent.class).getWorldPosition();
+            InventoryComponent inventory = entity.getComponent(InventoryComponent.class);
+            List<EntityRef> items = inventory.itemSlots;
+            for (EntityRef item: items) {
+                if (item.hasComponent(BookComponent.class)) {
+                    item.send(new DropItemEvent(location));
+                }
+            }
+            items.clear();
+        }
+    }
 }
 
