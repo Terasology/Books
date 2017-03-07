@@ -26,12 +26,13 @@ import org.terasology.logic.inventory.events.DropItemEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.world.block.entity.CreateBlockDropsEvent;
+import org.terasology.logic.inventory.events.BeforeItemPutInInventory;
 
 import java.util.List;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 
-// TODO: Reimplement some legacy code. We had book item filtering (no non-books) and books being dropped on bookcase "death"
+// TODO: Reimplement some legacy code. We had books being dropped on bookcase "death"
 public class BookcaseSystem extends BaseComponentSystem {
 
     @ReceiveEvent
@@ -46,6 +47,18 @@ public class BookcaseSystem extends BaseComponentSystem {
                 }
             }
             items.clear();
+        }
+    }
+
+    /**
+     * Check that only books can be put into a bookcase.
+     * @param event
+     * @param entity
+     */
+    @ReceiveEvent
+    public void filterBook(BeforeItemPutInInventory event, EntityRef entity) {
+        if (entity.hasComponent(BookcaseComponent.class) && !event.getItem().hasComponent(BookComponent.class)) {
+            event.consume();
         }
     }
 }
