@@ -28,8 +28,6 @@ import org.terasology.math.geom.Vector3f;
 import org.terasology.world.block.entity.CreateBlockDropsEvent;
 import org.terasology.logic.inventory.events.BeforeItemPutInInventory;
 
-import java.util.List;
-
 @RegisterSystem(RegisterMode.AUTHORITY)
 
 // TODO: Reimplement some legacy code. We had books being dropped on bookcase "death"
