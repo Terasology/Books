@@ -23,8 +23,6 @@ import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
 import org.terasology.logic.inventory.events.BeforeItemPutInInventory;
 
-import java.util.List;
-
 @RegisterSystem(RegisterMode.AUTHORITY)
 
 // TODO: Reimplement some legacy code. We had books being dropped on bookcase "death"
