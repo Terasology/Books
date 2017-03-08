@@ -21,18 +21,32 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.logic.inventory.events.BeforeItemPutInInventory;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.events.DropItemEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.world.block.entity.CreateBlockDropsEvent;
+import org.terasology.logic.inventory.events.BeforeItemPutInInventory;
 
 import java.util.List;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
 
-// TODO: Reimplement some legacy code. We had book item filtering (no non-books) and books being dropped on bookcase "death"
+// TODO: Reimplement some legacy code. We had books being dropped on bookcase "death"
 public class BookcaseSystem extends BaseComponentSystem {
+
+    /**
+     * Check that only books can be put into a bookcase.
+     * @param event
+     * @param entity
+     */
+    @ReceiveEvent
+    public void filterBook(BeforeItemPutInInventory event, EntityRef entity, BookcaseComponent bookcaseComponent) {
+        if (!event.getItem().hasComponent(BookComponent.class)) {
+            event.consume();
+        }
+    }
 
     @ReceiveEvent
     public void onDestroyBookCase(CreateBlockDropsEvent event, EntityRef entity, BookcaseComponent bookcaseComponent) {
@@ -46,6 +60,18 @@ public class BookcaseSystem extends BaseComponentSystem {
                 }
             }
             items.clear();
+        }
+    }
+
+    /**
+     * Check that only books can be put into a bookcase.
+     * @param event
+     * @param entity
+     */
+    @ReceiveEvent
+    public void filterBook(BeforeItemPutInInventory event, EntityRef entity, BookcaseComponent bookcaseComponent) {
+        if (!event.getItem().hasComponent(BookComponent.class)) {
+            event.consume();
         }
     }
 }
