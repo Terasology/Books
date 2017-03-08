@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 MovingBlocks
+ * Copyright 2017 MovingBlocks
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.terasology.books.logic;
 
 import org.terasology.entitySystem.entity.EntityRef;
@@ -27,13 +26,10 @@ import org.terasology.logic.inventory.events.DropItemEvent;
 import org.terasology.logic.location.LocationComponent;
 import org.terasology.math.geom.Vector3f;
 import org.terasology.world.block.entity.CreateBlockDropsEvent;
-import org.terasology.logic.inventory.events.BeforeItemPutInInventory;
 
 import java.util.List;
 
 @RegisterSystem(RegisterMode.AUTHORITY)
-
-// TODO: Reimplement some legacy code. We had books being dropped on bookcase "death"
 public class BookcaseSystem extends BaseComponentSystem {
 
     /**
@@ -62,17 +58,4 @@ public class BookcaseSystem extends BaseComponentSystem {
             items.clear();
         }
     }
-
-    /**
-     * Check that only books can be put into a bookcase.
-     * @param event
-     * @param entity
-     */
-    @ReceiveEvent
-    public void filterBook(BeforeItemPutInInventory event, EntityRef entity, BookcaseComponent bookcaseComponent) {
-        if (!event.getItem().hasComponent(BookComponent.class)) {
-            event.consume();
-        }
-    }
 }
-
