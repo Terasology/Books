@@ -21,6 +21,7 @@ import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
 import org.terasology.entitySystem.systems.RegisterMode;
 import org.terasology.entitySystem.systems.RegisterSystem;
+import org.terasology.logic.inventory.events.BeforeItemPutInInventory;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.events.DropItemEvent;
 import org.terasology.logic.location.LocationComponent;
@@ -34,6 +35,18 @@ import java.util.List;
 
 // TODO: Reimplement some legacy code. We had books being dropped on bookcase "death"
 public class BookcaseSystem extends BaseComponentSystem {
+
+    /**
+     * Check that only books can be put into a bookcase.
+     * @param event
+     * @param entity
+     */
+    @ReceiveEvent
+    public void filterBook(BeforeItemPutInInventory event, EntityRef entity, BookcaseComponent bookcaseComponent) {
+        if (!event.getItem().hasComponent(BookComponent.class)) {
+            event.consume();
+        }
+    }
 
     @ReceiveEvent
     public void onDestroyBookCase(CreateBlockDropsEvent event, EntityRef entity, BookcaseComponent bookcaseComponent) {
