@@ -46,13 +46,6 @@ public class BooksSystem extends BaseComponentSystem {
     @In
     private BlockManager blockManager;
 
-    private ParagraphRenderStyle centerRenderStyle = new ParagraphRenderStyle() {
-        @Override
-        public HorizontalAlign getHorizontalAlignment() {
-            return HorizontalAlign.CENTER;
-        }
-    };
-
     @ReceiveEvent
     public void onPlayerSpawn(OnPlayerSpawnedEvent event, EntityRef player, InventoryComponent inventory) {
         BlockItemFactory blockFactory = new BlockItemFactory(entityManager);
@@ -62,23 +55,5 @@ public class BooksSystem extends BaseComponentSystem {
         inventoryManager.giveItem(player, null, entityManager.create("Books:quill"), 9);
         inventoryManager.giveItem(player, null, entityManager.create("Books:book"), 10);
         inventoryManager.giveItem(player, null, entityManager.create("Books:redbook"), 11);
-
-        List<ParagraphData> page1 =  Arrays.asList(
-                        createTitleParagraph("Trial"),
-                        createTextParagraph("Where am I? How did I get here? ...<l>What am I going to do now? ...<l>" +
-                                "How am I going to survive the night? ...<l><l>I should probably start off with building a safe shelter. " +
-                                "I need some tools for that.<l><l>I should get some sticks from the nearby tree branches and dig in the ground for some " +
-                                "stones I might have a use for.<l><l>While I'm at it, I will probably need something to bind the stick and stone together - " +
-                                "twigs, should be good for that.<l><l>Once I get two stones, I should be able to make a Tool Stone (press G to open crafting window).")
-                        );
     }
-
-    private ParagraphData createTextParagraph(String text) {
-        return HTMLLikeParser.parseHTMLLikeParagraph(null, text);
-    }
-
-    private ParagraphData createTitleParagraph(String title) {
-        return HTMLLikeParser.parseHTMLLikeParagraph(centerRenderStyle, "<f engine:title>" + title + "</f>");
-    }
-
 }

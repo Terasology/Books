@@ -1,0 +1,68 @@
+/*
+ * Copyright 2017 MovingBlocks
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.terasology.books.rendering.nui.layers;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.terasology.registry.In;
+import org.terasology.rendering.nui.CoreScreenLayer;
+import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.WidgetUtil;
+import org.terasology.rendering.nui.widgets.UIButton;
+import org.terasology.rendering.nui.widgets.UIText;
+
+import java.awt.print.Book;
+
+public class PageEditor extends CoreScreenLayer {
+
+    private final Logger logger = LoggerFactory.getLogger(PageEditor.class);
+
+    @In
+    private NUIManager nuiManager;
+
+    private UIText pageText;
+    private UIButton save;
+    private UIButton exit;
+
+    @Override
+    public void initialise() {
+        pageText = find("pageText", UIText.class);
+        save = find("save", UIButton.class);
+        exit = find("exit", UIButton.class);
+
+        exit.subscribe(button -> nuiManager.closeScreen(this));
+
+        if (BookScreen.leftPageEditing) {
+            pageText.setText(BookScreen.getTextLeft());
+            save.subscribe(button -> {
+                BookScreen.pages.set(BookScreen.index.get(), pageText.getText());
+                BookScreen.updatePage();
+                nuiManager.closeScreen(this);
+            });
+        } else {
+            pageText.setText(BookScreen.getTextRight());
+            save.subscribe(button -> {
+                if (BookScreen.getState().equals(State.OPEN_RIGHT)) {
+                    BookScreen.pages.set(BookScreen.index.get(), pageText.getText());
+                } else if (BookScreen.getState().equals(State.PAGES)){
+                    BookScreen.pages.set(BookScreen.index.get() + 1, pageText.getText());
+                }
+                BookScreen.updatePage();
+                nuiManager.closeScreen(this);
+            });
+        }
+    }
+}

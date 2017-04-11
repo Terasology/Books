@@ -19,12 +19,10 @@ import com.google.common.base.Joiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.books.DefaultDocumentData;
-import org.terasology.books.RecipeParagraph;
 import org.terasology.books.logic.BookComponent;
 import org.terasology.books.logic.EditBooksComponent;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
-import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.logic.clipboard.ClipboardManager;
 import org.terasology.logic.common.DisplayNameComponent;
@@ -38,19 +36,26 @@ import org.terasology.rendering.nui.databinding.DefaultBinding;
 import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UIImage;
 import org.terasology.rendering.nui.widgets.UILabel;
-import org.terasology.rendering.nui.widgets.UIText;
 import org.terasology.rendering.nui.widgets.browser.data.DocumentData;
 import org.terasology.rendering.nui.widgets.browser.data.ParagraphData;
 import org.terasology.rendering.nui.widgets.browser.data.basic.HTMLLikeParser;
-import org.terasology.rendering.nui.widgets.browser.data.html.HTMLParser;
 import org.terasology.rendering.nui.widgets.browser.ui.BrowserWidget;
 import org.terasology.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
 import org.terasology.utilities.Assets;
-import org.terasology.world.block.Block;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+/**
+ * A simple enumeration containing different states the book can be in.
+ */
+enum State {
+    CLOSED_LEFT,
+    OPEN_LEFT,
+    PAGES,
+    OPEN_RIGHT,
+    CLOSED_RIGHT
+}
 
 /**
  * A Screen class that displays a book. The book is optionally editable, has pages which can be switched and there is a title.
@@ -73,40 +78,41 @@ public class BookScreen extends BaseInteractionScreen {
     @In
     private EntityManager entityManager;
 
-    private BookComponent book;
-    private EntityRef bookEntity;
-    private List<String> pages;
+    private static BookComponent book;
+    private static EntityRef bookEntity;
+    static List<String> pages;
+    static boolean leftPageEditing = true;
     private String status;
 
-    private UIImage coverLeft;
-    private UIImage coverRight;
-    private UIImage pageLeft;
-    private UIImage pageRight;
-    private BrowserWidget textLeft1;
-    private BrowserWidget textRight1;
-    private UIButton arrowForward;
-    private UIButton arrowBackward;
+    private static UIImage coverLeft;
+    private static UIImage coverRight;
+    private static UIImage pageLeft;
+    private static UIImage pageRight;
+    private static BrowserWidget textLeft1;
+    private static BrowserWidget textRight1;
+    private static UIButton arrowForward;
+    private static UIButton arrowBackward;
 
     private UIButton copy;
-    private UIButton save;
+    private UIButton edit;
     private UIButton cancel;
     private UIButton deleteLeft;
     private UIButton deleteRight;
     private UIButton addPage;
     private UILabel statusText;
-    private UILabel title;
+    private static UILabel title;
 
-    private Binding<TextureRegion> coverBackL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorLeft").get());
-    private Binding<TextureRegion> coverBackR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorRight").get());
-    private Binding<TextureRegion> coverFrontL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorLeft").get());
-    private Binding<TextureRegion> coverFrontR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorRight").get());
-    private Binding<TextureRegion> pageL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageLeft").get());
-    private Binding<TextureRegion> pageR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageRight").get());
-    private Binding<TextureRegion> blank = new DefaultBinding<>(Assets.getTextureRegion("Books:blank").get());
+    private static Binding<TextureRegion> coverBackL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorLeft").get());
+    private static Binding<TextureRegion> coverBackR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorRight").get());
+    private static Binding<TextureRegion> coverFrontL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorLeft").get());
+    private static Binding<TextureRegion> coverFrontR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorRight").get());
+    private static Binding<TextureRegion> pageL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageLeft").get());
+    private static Binding<TextureRegion> pageR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageRight").get());
+    private static Binding<TextureRegion> blank = new DefaultBinding<>(Assets.getTextureRegion("Books:blank").get());
 
-    private Binding<Integer> index;
+    static Binding<Integer> index;
 
-    private DocumentData pageContent;
+    private static DocumentData pageContent;
 
     private ParagraphRenderStyle centerRenderStyle = new ParagraphRenderStyle() {
         @Override
@@ -154,7 +160,7 @@ public class BookScreen extends BaseInteractionScreen {
         arrowForward = find("forward", UIButton.class);
         arrowBackward = find("backward", UIButton.class);
 
-        save = find("save", UIButton.class);
+        edit = find("edit", UIButton.class);
         cancel = find("cancel", UIButton.class);
         copy = find("copy", UIButton.class);
         deleteLeft = find("deleteLeft", UIButton.class);
@@ -178,13 +184,15 @@ public class BookScreen extends BaseInteractionScreen {
 
         cancel.subscribe(button -> nuiManager.closeScreen(this));
 
-        save.subscribe(button -> {
-            updateEdits();
-            if (pages != null) {
-                book.pages = new ArrayList<String>(pages);
-            }
-            bookEntity.saveComponent(book);
-            nuiManager.closeScreen(this);
+        edit.subscribe(button -> {
+            nuiManager.pushScreen("Books:pageEditor", PageEditor.class);
+
+//            updateEdits();
+//            if (pages != null) {
+//                book.pages = new ArrayList<String>(pages);
+//            }
+//            bookEntity.saveComponent(book);
+//            nuiManager.closeScreen(this);
         });
 
         deleteLeft.subscribe(button -> {
@@ -237,15 +245,15 @@ public class BookScreen extends BaseInteractionScreen {
 
     }
 
-    private DocumentData createDocument(String text) {
+    private static DocumentData createDocument(String text) {
         DefaultDocumentData page = new DefaultDocumentData(null);
         page.addParagraph(createTextParagraph(text));
         return page;
 
     }
 
-    private ParagraphData createTextParagraph(String text) {
-        return HTMLLikeParser.parseHTMLLikeParagraph(null, "<c "+ Color.BLACK.getRepresentation() + ">" + text + "</c>");
+    private static ParagraphData createTextParagraph(String text) {
+        return HTMLLikeParser.parseHTMLLikeParagraph(null, "<c " + Color.BLACK.getRepresentation() + ">" + text + "</c>");
     }
 
     /**
@@ -292,26 +300,25 @@ public class BookScreen extends BaseInteractionScreen {
 
     /**
      * Sets the tint ({@link Color}) of the book's cover.
+     *
      * @param color The color which the book cover should have.
      */
-    public void setTint(Color color) {
+    private void setTint(Color color) {
         coverLeft.setTint(color);
         coverRight.setTint(color);
     }
 
     private void setEditable(boolean editable) {
-        save.setVisible(editable);
+        edit.setVisible(editable);
         copy.setVisible(editable);
         cancel.setVisible(editable);
         deleteLeft.setVisible(editable);
         addPage.setVisible(editable);
         deleteRight.setVisible(editable);
 
-//        textRight1.setReadOnly(!editable);
-//        textLeft1.setReadOnly(!editable);
     }
 
-    private State getState() {
+    static State getState() {
         int i = index.get();
 
         if (i == -1) {
@@ -329,7 +336,7 @@ public class BookScreen extends BaseInteractionScreen {
         return State.PAGES;
     }
 
-    private String getTextLeft() {
+    static String getTextLeft() {
         if (getState().equals(State.OPEN_LEFT)) {
             return pages.get(index.get());
         }
@@ -340,7 +347,7 @@ public class BookScreen extends BaseInteractionScreen {
         return "";
     }
 
-    private String getTextRight() {
+    static String getTextRight() {
         if (getState().equals(State.OPEN_RIGHT)) {
             return pages.get(index.get());
         }
@@ -355,6 +362,7 @@ public class BookScreen extends BaseInteractionScreen {
      * Updates local array with any edits made to the pages by the player
      */
     private void updateEdits() {
+
 //        if (getState().equals(State.OPEN_RIGHT)) {
 //            pages.set(index.get(), textRight1.getText());
 //        } else if (getState().equals(State.OPEN_LEFT)) {
@@ -366,36 +374,31 @@ public class BookScreen extends BaseInteractionScreen {
     }
 
     private void updateEditingControls() {
-//        if (status.equals(STATUS_EDITING)) {
-//            setEditable(true);
-//            if (getState().equals(State.OPEN_RIGHT)) {
-//                textLeft.setReadOnly(true);
-//            } else if (getState().equals(State.OPEN_LEFT)) {
-//                textRight.setReadOnly(true);
-//            }
-//            if (getState().equals(State.OPEN_RIGHT)) {
-//                deleteLeft.setVisible(false);
-//            } else if (getState().equals(State.OPEN_LEFT)) {
-//                deleteRight.setVisible(false);
-//            } else if (getState().equals(State.CLOSED_LEFT) || getState().equals(State.CLOSED_RIGHT)) {
-//                setEditable(false);
-//            }
-//            if (pages.size() <= 2) {
-//                deleteRight.setVisible(false);
-//                deleteLeft.setVisible(false);
-//            }
-//        } else {
-//            setEditable(false);
-//        }
-//
-//        if (getState().equals(State.CLOSED_RIGHT)) {
-//            statusText.setText(status);
-//        } else {
-//            statusText.setText("");
-//        }
+        if (status.equals(STATUS_EDITING)) {
+            setEditable(true);
+            if (getState().equals(State.OPEN_RIGHT)) {
+                deleteLeft.setVisible(false);
+            } else if (getState().equals(State.OPEN_LEFT)) {
+                deleteRight.setVisible(false);
+            } else if (getState().equals(State.CLOSED_LEFT) || getState().equals(State.CLOSED_RIGHT)) {
+                setEditable(false);
+            }
+            if (pages.size() <= 2) {
+                deleteRight.setVisible(false);
+                deleteLeft.setVisible(false);
+            }
+        } else {
+            setEditable(false);
+        }
+
+        if (getState().equals(State.CLOSED_RIGHT)) {
+            statusText.setText(status);
+        } else {
+            statusText.setText("");
+        }
     }
 
-    private void updatePage() {
+    static void updatePage() {
         pageLeft.bindTexture(blank);
         pageRight.bindTexture(blank);
         arrowForward.setVisible(true);
@@ -484,15 +487,4 @@ public class BookScreen extends BaseInteractionScreen {
             index.set(index.get() - 1);
         }
     }
-}
-
-/**
- * A simple enumeration containing different states the book can be in.
- */
-enum State {
-    CLOSED_LEFT,
-    OPEN_LEFT,
-    PAGES,
-    OPEN_RIGHT,
-    CLOSED_RIGHT
 }

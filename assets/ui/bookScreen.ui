@@ -64,7 +64,6 @@
       },
       {
         "type": "BrowserWidget",
-        "multiline": true,
         "id": "textLeft",
         "layoutInfo": {
           "width": 350,
@@ -81,7 +80,6 @@
       },
       {
         "type": "BrowserWidget",
-        "multiline": true,
         "id": "textRight",
         "layoutInfo": {
           "width": 350,
@@ -144,8 +142,8 @@
         "contents": [
           {
             "type": "UIButton",
-            "id": "save",
-            "text": "Save"
+            "id": "edit",
+            "text": "Edit"
           },
           {
             "type": "UIButton",
