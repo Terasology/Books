@@ -18,10 +18,13 @@ package org.terasology.books.rendering.nui.layers;
 import com.google.common.base.Joiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.terasology.books.DefaultDocumentData;
+import org.terasology.books.RecipeParagraph;
 import org.terasology.books.logic.BookComponent;
 import org.terasology.books.logic.EditBooksComponent;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.logic.clipboard.ClipboardManager;
 import org.terasology.logic.common.DisplayNameComponent;
@@ -29,19 +32,24 @@ import org.terasology.logic.inventory.InventoryUtils;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.assets.texture.TextureRegion;
-import org.terasology.rendering.nui.BaseInteractionScreen;
-import org.terasology.rendering.nui.Color;
-import org.terasology.rendering.nui.NUIManager;
-import org.terasology.rendering.nui.WidgetUtil;
+import org.terasology.rendering.nui.*;
 import org.terasology.rendering.nui.databinding.Binding;
 import org.terasology.rendering.nui.databinding.DefaultBinding;
 import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UIImage;
 import org.terasology.rendering.nui.widgets.UILabel;
 import org.terasology.rendering.nui.widgets.UIText;
+import org.terasology.rendering.nui.widgets.browser.data.DocumentData;
+import org.terasology.rendering.nui.widgets.browser.data.ParagraphData;
+import org.terasology.rendering.nui.widgets.browser.data.basic.HTMLLikeParser;
+import org.terasology.rendering.nui.widgets.browser.data.html.HTMLParser;
+import org.terasology.rendering.nui.widgets.browser.ui.BrowserWidget;
+import org.terasology.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
 import org.terasology.utilities.Assets;
+import org.terasology.world.block.Block;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -74,8 +82,8 @@ public class BookScreen extends BaseInteractionScreen {
     private UIImage coverRight;
     private UIImage pageLeft;
     private UIImage pageRight;
-    private UIText textLeft;
-    private UIText textRight;
+    private BrowserWidget textLeft1;
+    private BrowserWidget textRight1;
     private UIButton arrowForward;
     private UIButton arrowBackward;
 
@@ -97,6 +105,15 @@ public class BookScreen extends BaseInteractionScreen {
     private Binding<TextureRegion> blank = new DefaultBinding<>(Assets.getTextureRegion("Books:blank").get());
 
     private Binding<Integer> index;
+
+    private DocumentData pageContent;
+
+    private ParagraphRenderStyle centerRenderStyle = new ParagraphRenderStyle() {
+        @Override
+        public HorizontalAlign getHorizontalAlignment() {
+            return HorizontalAlign.CENTER;
+        }
+    };
 
     public BookScreen() {
     }
@@ -132,8 +149,8 @@ public class BookScreen extends BaseInteractionScreen {
         coverRight = find("coverRight", UIImage.class);
         pageLeft = find("pageLeft", UIImage.class);
         pageRight = find("pageRight", UIImage.class);
-        textLeft = find("textLeft", UIText.class);
-        textRight = find("textRight", UIText.class);
+        textLeft1 = find("textLeft", BrowserWidget.class);
+        textRight1 = find("textRight", BrowserWidget.class);
         arrowForward = find("forward", UIButton.class);
         arrowBackward = find("backward", UIButton.class);
 
@@ -217,6 +234,18 @@ public class BookScreen extends BaseInteractionScreen {
             updateEdits();
             clipboardManager.setClipboardContents(buildPrefab());
         });
+
+    }
+
+    private DocumentData createDocument(String text) {
+        DefaultDocumentData page = new DefaultDocumentData(null);
+        page.addParagraph(createTextParagraph(text));
+        return page;
+
+    }
+
+    private ParagraphData createTextParagraph(String text) {
+        return HTMLLikeParser.parseHTMLLikeParagraph(null, "<c "+ Color.BLACK.getRepresentation() + ">" + text + "</c>");
     }
 
     /**
@@ -278,8 +307,8 @@ public class BookScreen extends BaseInteractionScreen {
         addPage.setVisible(editable);
         deleteRight.setVisible(editable);
 
-        textRight.setReadOnly(!editable);
-        textLeft.setReadOnly(!editable);
+//        textRight1.setReadOnly(!editable);
+//        textLeft1.setReadOnly(!editable);
     }
 
     private State getState() {
@@ -326,44 +355,44 @@ public class BookScreen extends BaseInteractionScreen {
      * Updates local array with any edits made to the pages by the player
      */
     private void updateEdits() {
-        if (getState().equals(State.OPEN_RIGHT)) {
-            pages.set(index.get(), textRight.getText());
-        } else if (getState().equals(State.OPEN_LEFT)) {
-            pages.set(index.get(), textLeft.getText());
-        } else if (getState().equals(State.PAGES)) {
-            pages.set(index.get(), textLeft.getText());
-            pages.set(index.get() + 1, textRight.getText());
-        }
+//        if (getState().equals(State.OPEN_RIGHT)) {
+//            pages.set(index.get(), textRight1.getText());
+//        } else if (getState().equals(State.OPEN_LEFT)) {
+//            pages.set(index.get(), textLeft.getText());
+//        } else if (getState().equals(State.PAGES)) {
+//            pages.set(index.get(), textLeft.getText());
+//            pages.set(index.get() + 1, textRight.getText());
+//        }
     }
 
     private void updateEditingControls() {
-        if (status.equals(STATUS_EDITING)) {
-            setEditable(true);
-            if (getState().equals(State.OPEN_RIGHT)) {
-                textLeft.setReadOnly(true);
-            } else if (getState().equals(State.OPEN_LEFT)) {
-                textRight.setReadOnly(true);
-            }
-            if (getState().equals(State.OPEN_RIGHT)) {
-                deleteLeft.setVisible(false);
-            } else if (getState().equals(State.OPEN_LEFT)) {
-                deleteRight.setVisible(false);
-            } else if (getState().equals(State.CLOSED_LEFT) || getState().equals(State.CLOSED_RIGHT)) {
-                setEditable(false);
-            }
-            if (pages.size() <= 2) {
-                deleteRight.setVisible(false);
-                deleteLeft.setVisible(false);
-            }
-        } else {
-            setEditable(false);
-        }
-
-        if (getState().equals(State.CLOSED_RIGHT)) {
-            statusText.setText(status);
-        } else {
-            statusText.setText("");
-        }
+//        if (status.equals(STATUS_EDITING)) {
+//            setEditable(true);
+//            if (getState().equals(State.OPEN_RIGHT)) {
+//                textLeft.setReadOnly(true);
+//            } else if (getState().equals(State.OPEN_LEFT)) {
+//                textRight.setReadOnly(true);
+//            }
+//            if (getState().equals(State.OPEN_RIGHT)) {
+//                deleteLeft.setVisible(false);
+//            } else if (getState().equals(State.OPEN_LEFT)) {
+//                deleteRight.setVisible(false);
+//            } else if (getState().equals(State.CLOSED_LEFT) || getState().equals(State.CLOSED_RIGHT)) {
+//                setEditable(false);
+//            }
+//            if (pages.size() <= 2) {
+//                deleteRight.setVisible(false);
+//                deleteLeft.setVisible(false);
+//            }
+//        } else {
+//            setEditable(false);
+//        }
+//
+//        if (getState().equals(State.CLOSED_RIGHT)) {
+//            statusText.setText(status);
+//        } else {
+//            statusText.setText("");
+//        }
     }
 
     private void updatePage() {
@@ -373,8 +402,10 @@ public class BookScreen extends BaseInteractionScreen {
         arrowBackward.setVisible(true);
         title.setText("");
 
-        textRight.setText(getTextRight());
-        textLeft.setText(getTextLeft());
+        pageContent = createDocument(getTextLeft());
+        textLeft1.navigateTo(pageContent);
+        pageContent = createDocument(getTextRight());
+        textRight1.navigateTo(pageContent);
 
         if (getState().equals(State.CLOSED_RIGHT)) {
             coverRight.bindTexture(coverFrontR);

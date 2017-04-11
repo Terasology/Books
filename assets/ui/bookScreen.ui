@@ -63,7 +63,7 @@
         "image": "Books:book#pageRight"
       },
       {
-        "type": "UIText",
+        "type": "BrowserWidget",
         "multiline": true,
         "id": "textLeft",
         "layoutInfo": {
@@ -80,7 +80,7 @@
         }
       },
       {
-        "type": "UIText",
+        "type": "BrowserWidget",
         "multiline": true,
         "id": "textRight",
         "layoutInfo": {
