@@ -19,10 +19,12 @@ import com.google.common.base.Joiner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.books.DefaultDocumentData;
+import org.terasology.books.RecipeParagraph;
 import org.terasology.books.logic.BookComponent;
 import org.terasology.books.logic.EditBooksComponent;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
+import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.entitySystem.prefab.PrefabManager;
 import org.terasology.logic.clipboard.ClipboardManager;
 import org.terasology.logic.common.DisplayNameComponent;
@@ -42,8 +44,11 @@ import org.terasology.rendering.nui.widgets.browser.data.basic.HTMLLikeParser;
 import org.terasology.rendering.nui.widgets.browser.ui.BrowserWidget;
 import org.terasology.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
 import org.terasology.utilities.Assets;
+import org.terasology.world.block.Block;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -65,7 +70,7 @@ public class BookScreen extends BaseInteractionScreen {
     private static final String STATUS_READING = "Reading";
     private static final String STATUS_READ_ONLY = "Read-only";
 
-    private final Logger logger = LoggerFactory.getLogger(BookScreen.class);
+    private static final Logger logger = LoggerFactory.getLogger(BookScreen.class);
 
     @In
     private NUIManager nuiManager;
@@ -102,6 +107,8 @@ public class BookScreen extends BaseInteractionScreen {
     private UIButton addPage;
     private UILabel statusText;
     private static UILabel title;
+    static Prefab stoneItem;
+    static Prefab toolStoneItem;
 
     private static Binding<TextureRegion> coverBackL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorLeft").get());
     private static Binding<TextureRegion> coverBackR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorRight").get());
@@ -239,17 +246,43 @@ public class BookScreen extends BaseInteractionScreen {
             bookEntity.addOrSaveComponent(book);
         });
 
+        stoneItem = prefabManager.getPrefab("core:pickaxe");
+        toolStoneItem = prefabManager.getPrefab("core:pickaxe");
+        logger.info(stoneItem.toString());
+        logger.info(toolStoneItem.toString());
     }
 
     private static DocumentData createDocument(String text) {
         DefaultDocumentData page = new DefaultDocumentData(null);
-        page.addParagraph(createTextParagraph(text));
+        page.addParagraphs(createParagraphs(text));
         return page;
+    }
 
+    private static Collection<ParagraphData> createParagraphs(String text) {
+        Collection<ParagraphData> paragraphs = new ArrayList<ParagraphData>();
+        while(text.length() > 0) {
+            if (text.contains("<recipe")) {
+                int i = text.indexOf("<recipe");
+                paragraphs.add(createTextParagraph(text.substring(0, i)));
+                text = text.substring(i);
+                i = text.indexOf(">");
+                String recipeJson = text.substring("<recipe".length(), i);
+                logger.info("Recipe: " + recipeJson);
+                text = text.substring(i + 1);
+            } else {
+                paragraphs.add(createTextParagraph(text));
+                text = "";
+            }
+        }
+        return paragraphs;
     }
 
     private static ParagraphData createTextParagraph(String text) {
         return HTMLLikeParser.parseHTMLLikeParagraph(null, "<c " + "198"/*Color.BLACK.getRepresentation()*/ + ">" + text + "</c>");
+    }
+
+    private static RecipeParagraph createRecipeParagraph(String text) {
+        return new RecipeParagraph(new Block[2], new Prefab[]{stoneItem, stoneItem}, null, toolStoneItem, 1);
     }
 
     /**
