@@ -43,26 +43,31 @@ public class PageEditor extends CoreScreenLayer {
         save = find("save", UIButton.class);
         exit = find("exit", UIButton.class);
 
-        exit.subscribe(button -> nuiManager.closeScreen(this));
-
-        if (BookScreen.leftPageEditing) {
-            pageText.setText(BookScreen.getTextLeft());
-            save.subscribe(button -> {
+        save.subscribe(button -> {
+            if (BookScreen.leftPageEditing){
                 BookScreen.pages.set(BookScreen.index.get(), pageText.getText());
                 BookScreen.updatePage();
                 nuiManager.closeScreen(this);
-            });
-        } else {
-            pageText.setText(BookScreen.getTextRight());
-            save.subscribe(button -> {
+            } else {
                 if (BookScreen.getState().equals(State.OPEN_RIGHT)) {
                     BookScreen.pages.set(BookScreen.index.get(), pageText.getText());
-                } else if (BookScreen.getState().equals(State.PAGES)){
+                } else if (BookScreen.getState().equals(State.PAGES)) {
                     BookScreen.pages.set(BookScreen.index.get() + 1, pageText.getText());
                 }
                 BookScreen.updatePage();
                 nuiManager.closeScreen(this);
-            });
+            }
+        });
+        exit.subscribe(button -> nuiManager.closeScreen(this));
+    }
+
+    @Override
+    public void onOpened() {
+        if (BookScreen.leftPageEditing) {
+            pageText.setText(BookScreen.getTextLeft());
+        } else {
+            pageText.setText(BookScreen.getTextRight());
         }
     }
+
 }

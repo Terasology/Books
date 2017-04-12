@@ -130,7 +130,7 @@
         "type": "rowLayout",
         "id": "actionRow",
         "layoutInfo": {
-          "width": 210,
+          "width": 650,
           "height": 27,
           "use-content-height": true,
           "position-horizontal-center": {},
@@ -142,18 +142,23 @@
         "contents": [
           {
             "type": "UIButton",
-            "id": "edit",
+            "id": "editLeft",
             "text": "Edit"
           },
           {
             "type": "UIButton",
-            "id": "copy",
-            "text": "Copy"
+            "id": "save",
+            "text": "Save"
           },
           {
             "type": "UIButton",
             "id": "cancel",
             "text": "Cancel"
+          },
+          {
+            "type": "UIButton",
+            "id": "editRight",
+            "text": "Edit"
           }
         ]
       },

@@ -93,8 +93,9 @@ public class BookScreen extends BaseInteractionScreen {
     private static UIButton arrowForward;
     private static UIButton arrowBackward;
 
-    private UIButton copy;
-    private UIButton edit;
+    private UIButton save;
+    private UIButton editLeft;
+    private UIButton editRight;
     private UIButton cancel;
     private UIButton deleteLeft;
     private UIButton deleteRight;
@@ -160,23 +161,22 @@ public class BookScreen extends BaseInteractionScreen {
         arrowForward = find("forward", UIButton.class);
         arrowBackward = find("backward", UIButton.class);
 
-        edit = find("edit", UIButton.class);
+        editLeft = find("editLeft", UIButton.class);
+        editRight = find("editRight", UIButton.class);
         cancel = find("cancel", UIButton.class);
-        copy = find("copy", UIButton.class);
+        save = find("save", UIButton.class);
         deleteLeft = find("deleteLeft", UIButton.class);
         addPage = find("addPage", UIButton.class);
         deleteRight = find("deleteRight", UIButton.class);
         statusText = find("status", UILabel.class);
 
         WidgetUtil.trySubscribe(this, "forward", button -> {
-            updateEdits();
             forward();
             updateEditingControls();
             updatePage();
         });
 
         WidgetUtil.trySubscribe(this, "backward", button -> {
-            updateEdits();
             backward();
             updateEditingControls();
             updatePage();
@@ -184,19 +184,17 @@ public class BookScreen extends BaseInteractionScreen {
 
         cancel.subscribe(button -> nuiManager.closeScreen(this));
 
-        edit.subscribe(button -> {
+        editLeft.subscribe(button -> {
+            leftPageEditing = true;
             nuiManager.pushScreen("Books:pageEditor", PageEditor.class);
+        });
 
-//            updateEdits();
-//            if (pages != null) {
-//                book.pages = new ArrayList<String>(pages);
-//            }
-//            bookEntity.saveComponent(book);
-//            nuiManager.closeScreen(this);
+        editRight.subscribe(button -> {
+            leftPageEditing = false;
+            nuiManager.pushScreen("Books:pageEditor", PageEditor.class);
         });
 
         deleteLeft.subscribe(button -> {
-            updateEdits();
             if (getState().equals(State.PAGES)) {
                 pages.remove(index.get() - 1);
                 pages.remove(index.get() - 1);
@@ -210,7 +208,6 @@ public class BookScreen extends BaseInteractionScreen {
         });
 
         deleteRight.subscribe(button -> {
-            updateEdits();
             if (getState().equals(State.PAGES)) {
                 pages.remove(index.get() + 1);
                 pages.remove(index.get() + 1);
@@ -223,7 +220,6 @@ public class BookScreen extends BaseInteractionScreen {
         });
 
         addPage.subscribe(button -> {
-            updateEdits();
             if (getState().equals(State.OPEN_RIGHT)) {
                 pages.add(index.get(), "");
                 pages.add(index.get(), "");
@@ -238,9 +234,9 @@ public class BookScreen extends BaseInteractionScreen {
             updatePage();
         });
 
-        copy.subscribe(button -> {
-            updateEdits();
-            clipboardManager.setClipboardContents(buildPrefab());
+        save.subscribe(button -> {
+            book.pages = pages;
+            bookEntity.addOrSaveComponent(book);
         });
 
     }
@@ -253,7 +249,7 @@ public class BookScreen extends BaseInteractionScreen {
     }
 
     private static ParagraphData createTextParagraph(String text) {
-        return HTMLLikeParser.parseHTMLLikeParagraph(null, "<c " + Color.BLACK.getRepresentation() + ">" + text + "</c>");
+        return HTMLLikeParser.parseHTMLLikeParagraph(null, "<c " + "198"/*Color.BLACK.getRepresentation()*/ + ">" + text + "</c>");
     }
 
     /**
@@ -309,8 +305,25 @@ public class BookScreen extends BaseInteractionScreen {
     }
 
     private void setEditable(boolean editable) {
-        edit.setVisible(editable);
-        copy.setVisible(editable);
+        if (editable) {
+            if (getState().equals(State.OPEN_RIGHT)) {
+                editRight.setVisible(true);
+                editLeft.setVisible(false);
+            } else if (getState().equals(State.OPEN_LEFT)) {
+                editLeft.setVisible(true);
+                editRight.setVisible(false);
+            } else if (getState().equals(State.PAGES)) {
+                editLeft.setVisible(true);
+                editRight.setVisible(true);
+            } else {
+                editLeft.setVisible(false);
+                editRight.setVisible(false);
+            }
+        } else {
+            editLeft.setVisible(false);
+            editRight.setVisible(false);
+        }
+        save.setVisible(editable);
         cancel.setVisible(editable);
         deleteLeft.setVisible(editable);
         addPage.setVisible(editable);
@@ -358,20 +371,6 @@ public class BookScreen extends BaseInteractionScreen {
         return "";
     }
 
-    /**
-     * Updates local array with any edits made to the pages by the player
-     */
-    private void updateEdits() {
-
-//        if (getState().equals(State.OPEN_RIGHT)) {
-//            pages.set(index.get(), textRight1.getText());
-//        } else if (getState().equals(State.OPEN_LEFT)) {
-//            pages.set(index.get(), textLeft.getText());
-//        } else if (getState().equals(State.PAGES)) {
-//            pages.set(index.get(), textLeft.getText());
-//            pages.set(index.get() + 1, textRight.getText());
-//        }
-    }
 
     private void updateEditingControls() {
         if (status.equals(STATUS_EDITING)) {
