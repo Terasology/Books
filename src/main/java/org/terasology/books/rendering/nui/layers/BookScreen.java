@@ -16,6 +16,9 @@
 package org.terasology.books.rendering.nui.layers;
 
 import com.google.common.base.Joiner;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.books.DefaultDocumentData;
@@ -45,10 +48,10 @@ import org.terasology.rendering.nui.widgets.browser.ui.BrowserWidget;
 import org.terasology.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
 import org.terasology.utilities.Assets;
 import org.terasology.world.block.Block;
+import org.terasology.world.block.BlockManager;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -71,7 +74,32 @@ public class BookScreen extends BaseInteractionScreen {
     private static final String STATUS_READ_ONLY = "Read-only";
 
     private static final Logger logger = LoggerFactory.getLogger(BookScreen.class);
-
+    static List<String> pages;
+    static boolean leftPageEditing = true;
+    static Binding<Integer> index;
+    @In
+    private static PrefabManager prefabManager;
+    @In
+    private static BlockManager blockManager;
+    private static BookComponent book;
+    private static EntityRef bookEntity;
+    private static UIImage coverLeft;
+    private static UIImage coverRight;
+    private static UIImage pageLeft;
+    private static UIImage pageRight;
+    private static BrowserWidget textLeft;
+    private static BrowserWidget textRight;
+    private static UIButton arrowForward;
+    private static UIButton arrowBackward;
+    private static UILabel title;
+    private static Binding<TextureRegion> coverBackL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorLeft").get());
+    private static Binding<TextureRegion> coverBackR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorRight").get());
+    private static Binding<TextureRegion> coverFrontL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorLeft").get());
+    private static Binding<TextureRegion> coverFrontR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorRight").get());
+    private static Binding<TextureRegion> pageL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageLeft").get());
+    private static Binding<TextureRegion> pageR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageRight").get());
+    private static Binding<TextureRegion> blank = new DefaultBinding<>(Assets.getTextureRegion("Books:blank").get());
+    private static DocumentData pageContent;
     @In
     private NUIManager nuiManager;
     @In
@@ -79,25 +107,8 @@ public class BookScreen extends BaseInteractionScreen {
     @In
     private ClipboardManager clipboardManager;
     @In
-    private PrefabManager prefabManager;
-    @In
     private EntityManager entityManager;
-
-    private static BookComponent book;
-    private static EntityRef bookEntity;
-    static List<String> pages;
-    static boolean leftPageEditing = true;
     private String status;
-
-    private static UIImage coverLeft;
-    private static UIImage coverRight;
-    private static UIImage pageLeft;
-    private static UIImage pageRight;
-    private static BrowserWidget textLeft1;
-    private static BrowserWidget textRight1;
-    private static UIButton arrowForward;
-    private static UIButton arrowBackward;
-
     private UIButton save;
     private UIButton editLeft;
     private UIButton editRight;
@@ -106,22 +117,6 @@ public class BookScreen extends BaseInteractionScreen {
     private UIButton deleteRight;
     private UIButton addPage;
     private UILabel statusText;
-    private static UILabel title;
-    static Prefab stoneItem;
-    static Prefab toolStoneItem;
-
-    private static Binding<TextureRegion> coverBackL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorLeft").get());
-    private static Binding<TextureRegion> coverBackR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorRight").get());
-    private static Binding<TextureRegion> coverFrontL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorLeft").get());
-    private static Binding<TextureRegion> coverFrontR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorRight").get());
-    private static Binding<TextureRegion> pageL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageLeft").get());
-    private static Binding<TextureRegion> pageR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageRight").get());
-    private static Binding<TextureRegion> blank = new DefaultBinding<>(Assets.getTextureRegion("Books:blank").get());
-
-    static Binding<Integer> index;
-
-    private static DocumentData pageContent;
-
     private ParagraphRenderStyle centerRenderStyle = new ParagraphRenderStyle() {
         @Override
         public HorizontalAlign getHorizontalAlignment() {
@@ -130,6 +125,147 @@ public class BookScreen extends BaseInteractionScreen {
     };
 
     public BookScreen() {
+    }
+
+    private static DocumentData createDocument(String text) {
+        DefaultDocumentData page = new DefaultDocumentData(null);
+        page.addParagraphs(createParagraphs(text));
+        return page;
+    }
+
+    private static Collection<ParagraphData> createParagraphs(String text) {
+        Collection<ParagraphData> paragraphs = new ArrayList<ParagraphData>();
+        while (text.length() > 0) {
+            if (text.contains("<recipe")) {
+                int i = text.indexOf("<recipe");
+                paragraphs.add(createTextParagraph(text.substring(0, i)));
+                text = text.substring(i);
+                i = text.indexOf(">");
+                String recipeJsonString = text.substring("<recipe".length(), i);
+                JsonObject recipeJson = new JsonParser().parse(recipeJsonString).getAsJsonObject();
+                int blockIngredients = recipeJson.get("blockIngredients").getAsInt();
+
+                JsonArray prefabsArray = recipeJson.get("itemIngredients").getAsJsonArray();
+                Prefab[] prefabs = new Prefab[prefabsArray.size()];
+                for (int x = 0; x < prefabsArray.size(); x++) {
+                    String prefab = prefabsArray.get(x).getAsString();
+                    prefabs[x] = prefabManager.getPrefab(prefab);
+                }
+                Block blockResult = null;
+                if (!recipeJson.get("blockResult").isJsonNull()) {
+                    blockResult = blockManager.getBlockFamily(recipeJson.get("blockResult").getAsString()).getArchetypeBlock();
+                }
+                Prefab itemResult = null;
+                if (!recipeJson.get("itemResult").isJsonNull()) {
+                    itemResult = prefabManager.getPrefab(recipeJson.get("itemResult").getAsString());
+                }
+                int resultCount = recipeJson.get("resultCount").getAsInt();
+                paragraphs.add(createRecipeParagraph(blockIngredients, prefabs, blockResult, itemResult, resultCount));
+
+                text = text.substring(i + 1);
+            } else {
+                paragraphs.add(createTextParagraph(text));
+                text = "";
+            }
+        }
+        return paragraphs;
+    }
+
+    private static ParagraphData createTextParagraph(String text) {
+        return HTMLLikeParser.parseHTMLLikeParagraph(null, "<c " + "198"/*Color.BLACK.getRepresentation()*/ + ">" + text + "</c>");
+    }
+
+    private static RecipeParagraph createRecipeParagraph(int blockIngredients, Prefab[] prefabs, Block blockResult, Prefab itemResult, int resultCount) {
+        return new RecipeParagraph(new Block[blockIngredients], prefabs, blockResult, itemResult, resultCount);
+    }
+
+    static State getState() {
+        int i = index.get();
+
+        if (i == -1) {
+            return State.CLOSED_RIGHT;
+        }
+        if (i == 0) {
+            return State.OPEN_RIGHT;
+        }
+        if (i == pages.size() - 1) {
+            return State.OPEN_LEFT;
+        }
+        if (i == pages.size()) {
+            return State.CLOSED_LEFT;
+        }
+        return State.PAGES;
+    }
+
+    static String getTextLeft() {
+        if (getState().equals(State.OPEN_LEFT)) {
+            return pages.get(index.get());
+        }
+        if (getState().equals(State.PAGES)) {
+            return pages.get(index.get());
+        }
+
+        return "";
+    }
+
+    static String getTextRight() {
+        if (getState().equals(State.OPEN_RIGHT)) {
+            return pages.get(index.get());
+        }
+        if (getState().equals(State.PAGES)) {
+            return pages.get(index.get() + 1);
+        }
+
+        return "";
+    }
+
+    static void updatePage() {
+        pageLeft.bindTexture(blank);
+        pageRight.bindTexture(blank);
+        arrowForward.setVisible(true);
+        arrowBackward.setVisible(true);
+        title.setText("");
+
+        pageContent = createDocument(getTextLeft());
+        textLeft.navigateTo(pageContent);
+        pageContent = createDocument(getTextRight());
+        textRight.navigateTo(pageContent);
+
+        if (getState().equals(State.CLOSED_RIGHT)) {
+            coverRight.bindTexture(coverFrontR);
+            coverLeft.bindTexture(blank);
+            arrowBackward.setVisible(false);
+            if (book.title != null) {
+                title.setText(book.title);
+            } else if (bookEntity.getComponent(DisplayNameComponent.class) != null) {
+                DisplayNameComponent displayNameComponent = bookEntity.getComponent(DisplayNameComponent.class);
+                String name = displayNameComponent.name;
+                if (name != null) {
+                    title.setText(name);
+                } else {
+                    // Books:book -> book
+                    String prefabName = bookEntity.getParentPrefab().getName().split(":")[1];
+                    String capitalisedName = Character.toUpperCase(prefabName.charAt(0)) + prefabName.substring(1);
+                    title.setText(capitalisedName);
+                }
+            }
+        } else if (getState().equals(State.CLOSED_LEFT)) {
+            coverRight.bindTexture(blank);
+            coverLeft.bindTexture(coverFrontL);
+            arrowForward.setVisible(false);
+        } else {
+            coverLeft.bindTexture(coverBackL);
+            coverRight.bindTexture(coverBackR);
+
+            if (getState().equals(State.OPEN_RIGHT)) {
+                pageRight.bindTexture(pageR);
+            } else if (getState().equals(State.OPEN_LEFT)) {
+                pageLeft.bindTexture(pageL);
+            } else {
+                pageLeft.bindTexture(pageL);
+                pageRight.bindTexture(pageR);
+            }
+        }
     }
 
     /**
@@ -163,8 +299,8 @@ public class BookScreen extends BaseInteractionScreen {
         coverRight = find("coverRight", UIImage.class);
         pageLeft = find("pageLeft", UIImage.class);
         pageRight = find("pageRight", UIImage.class);
-        textLeft1 = find("textLeft", BrowserWidget.class);
-        textRight1 = find("textRight", BrowserWidget.class);
+        textLeft = find("textLeft", BrowserWidget.class);
+        textRight = find("textRight", BrowserWidget.class);
         arrowForward = find("forward", UIButton.class);
         arrowBackward = find("backward", UIButton.class);
 
@@ -245,44 +381,6 @@ public class BookScreen extends BaseInteractionScreen {
             book.pages = pages;
             bookEntity.addOrSaveComponent(book);
         });
-
-        stoneItem = prefabManager.getPrefab("core:pickaxe");
-        toolStoneItem = prefabManager.getPrefab("core:pickaxe");
-        logger.info(stoneItem.toString());
-        logger.info(toolStoneItem.toString());
-    }
-
-    private static DocumentData createDocument(String text) {
-        DefaultDocumentData page = new DefaultDocumentData(null);
-        page.addParagraphs(createParagraphs(text));
-        return page;
-    }
-
-    private static Collection<ParagraphData> createParagraphs(String text) {
-        Collection<ParagraphData> paragraphs = new ArrayList<ParagraphData>();
-        while(text.length() > 0) {
-            if (text.contains("<recipe")) {
-                int i = text.indexOf("<recipe");
-                paragraphs.add(createTextParagraph(text.substring(0, i)));
-                text = text.substring(i);
-                i = text.indexOf(">");
-                String recipeJson = text.substring("<recipe".length(), i);
-                logger.info("Recipe: " + recipeJson);
-                text = text.substring(i + 1);
-            } else {
-                paragraphs.add(createTextParagraph(text));
-                text = "";
-            }
-        }
-        return paragraphs;
-    }
-
-    private static ParagraphData createTextParagraph(String text) {
-        return HTMLLikeParser.parseHTMLLikeParagraph(null, "<c " + "198"/*Color.BLACK.getRepresentation()*/ + ">" + text + "</c>");
-    }
-
-    private static RecipeParagraph createRecipeParagraph(String text) {
-        return new RecipeParagraph(new Block[2], new Prefab[]{stoneItem, stoneItem}, null, toolStoneItem, 1);
     }
 
     /**
@@ -364,47 +462,6 @@ public class BookScreen extends BaseInteractionScreen {
 
     }
 
-    static State getState() {
-        int i = index.get();
-
-        if (i == -1) {
-            return State.CLOSED_RIGHT;
-        }
-        if (i == 0) {
-            return State.OPEN_RIGHT;
-        }
-        if (i == pages.size() - 1) {
-            return State.OPEN_LEFT;
-        }
-        if (i == pages.size()) {
-            return State.CLOSED_LEFT;
-        }
-        return State.PAGES;
-    }
-
-    static String getTextLeft() {
-        if (getState().equals(State.OPEN_LEFT)) {
-            return pages.get(index.get());
-        }
-        if (getState().equals(State.PAGES)) {
-            return pages.get(index.get());
-        }
-
-        return "";
-    }
-
-    static String getTextRight() {
-        if (getState().equals(State.OPEN_RIGHT)) {
-            return pages.get(index.get());
-        }
-        if (getState().equals(State.PAGES)) {
-            return pages.get(index.get() + 1);
-        }
-
-        return "";
-    }
-
-
     private void updateEditingControls() {
         if (status.equals(STATUS_EDITING)) {
             setEditable(true);
@@ -427,55 +484,6 @@ public class BookScreen extends BaseInteractionScreen {
             statusText.setText(status);
         } else {
             statusText.setText("");
-        }
-    }
-
-    static void updatePage() {
-        pageLeft.bindTexture(blank);
-        pageRight.bindTexture(blank);
-        arrowForward.setVisible(true);
-        arrowBackward.setVisible(true);
-        title.setText("");
-
-        pageContent = createDocument(getTextLeft());
-        textLeft1.navigateTo(pageContent);
-        pageContent = createDocument(getTextRight());
-        textRight1.navigateTo(pageContent);
-
-        if (getState().equals(State.CLOSED_RIGHT)) {
-            coverRight.bindTexture(coverFrontR);
-            coverLeft.bindTexture(blank);
-            arrowBackward.setVisible(false);
-            if (book.title != null) {
-                title.setText(book.title);
-            } else if (bookEntity.getComponent(DisplayNameComponent.class) != null) {
-                DisplayNameComponent displayNameComponent = bookEntity.getComponent(DisplayNameComponent.class);
-                String name = displayNameComponent.name;
-                if (name != null) {
-                    title.setText(name);
-                } else {
-                    // Books:book -> book
-                    String prefabName = bookEntity.getParentPrefab().getName().split(":")[1];
-                    String capitalisedName = Character.toUpperCase(prefabName.charAt(0)) + prefabName.substring(1);
-                    title.setText(capitalisedName);
-                }
-            }
-        } else if (getState().equals(State.CLOSED_LEFT)) {
-            coverRight.bindTexture(blank);
-            coverLeft.bindTexture(coverFrontL);
-            arrowForward.setVisible(false);
-        } else {
-            coverLeft.bindTexture(coverBackL);
-            coverRight.bindTexture(coverBackR);
-
-            if (getState().equals(State.OPEN_RIGHT)) {
-                pageRight.bindTexture(pageR);
-            } else if (getState().equals(State.OPEN_LEFT)) {
-                pageLeft.bindTexture(pageL);
-            } else {
-                pageLeft.bindTexture(pageL);
-                pageRight.bindTexture(pageR);
-            }
         }
     }
 
