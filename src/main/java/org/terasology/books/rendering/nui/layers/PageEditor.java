@@ -20,11 +20,8 @@ import org.slf4j.LoggerFactory;
 import org.terasology.registry.In;
 import org.terasology.rendering.nui.CoreScreenLayer;
 import org.terasology.rendering.nui.NUIManager;
-import org.terasology.rendering.nui.WidgetUtil;
 import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UIText;
-
-import java.awt.print.Book;
 
 public class PageEditor extends CoreScreenLayer {
 
@@ -44,7 +41,7 @@ public class PageEditor extends CoreScreenLayer {
         exit = find("exit", UIButton.class);
 
         save.subscribe(button -> {
-            if (BookScreen.leftPageEditing){
+            if (BookScreen.leftPageEditing) {
                 BookScreen.pages.set(BookScreen.index.get(), pageText.getText());
                 BookScreen.updatePage();
                 nuiManager.closeScreen(this);
