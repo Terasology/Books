@@ -25,8 +25,6 @@ import org.terasology.rendering.nui.widgets.UIText;
 
 public class PageEditor extends CoreScreenLayer {
 
-    private final Logger logger = LoggerFactory.getLogger(PageEditor.class);
-
     @In
     private NUIManager nuiManager;
 

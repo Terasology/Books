@@ -74,13 +74,27 @@ public class BookScreen extends BaseInteractionScreen {
     private static final String STATUS_READ_ONLY = "Read-only";
 
     private static final Logger logger = LoggerFactory.getLogger(BookScreen.class);
+
+    /* Local List of pages that the bookComponent contains */
     static List<String> pages;
+    /* Boolean to see which edit button was clicked (left or right) */
     static boolean leftPageEditing = true;
+    /* Index for finding which page number is opened */
     static Binding<Integer> index;
+
     @In
     private static PrefabManager prefabManager;
     @In
     private static BlockManager blockManager;
+    @In
+    private NUIManager nuiManager;
+    @In
+    private LocalPlayer localPlayer;
+    @In
+    private ClipboardManager clipboardManager;
+    @In
+    private EntityManager entityManager;
+
     private static BookComponent book;
     private static EntityRef bookEntity;
     private static UIImage coverLeft;
@@ -99,15 +113,7 @@ public class BookScreen extends BaseInteractionScreen {
     private static Binding<TextureRegion> pageL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageLeft").get());
     private static Binding<TextureRegion> pageR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageRight").get());
     private static Binding<TextureRegion> blank = new DefaultBinding<>(Assets.getTextureRegion("Books:blank").get());
-    private static DocumentData pageContent;
-    @In
-    private NUIManager nuiManager;
-    @In
-    private LocalPlayer localPlayer;
-    @In
-    private ClipboardManager clipboardManager;
-    @In
-    private EntityManager entityManager;
+
     private String status;
     private UIButton save;
     private UIButton editLeft;
@@ -127,12 +133,18 @@ public class BookScreen extends BaseInteractionScreen {
     public BookScreen() {
     }
 
+    /**
+     * Returns a HTMLLike document for a given string
+     */
     private static DocumentData createDocument(String text) {
         DefaultDocumentData page = new DefaultDocumentData(null);
         page.addParagraphs(createParagraphs(text));
         return page;
     }
 
+    /**
+     * Converts the Text into TextParagraphs and RecipeParagraphs
+     */
     private static Collection<ParagraphData> createParagraphs(String text) {
         Collection<ParagraphData> paragraphs = new ArrayList<ParagraphData>();
         while (text.length() > 0) {
@@ -142,9 +154,9 @@ public class BookScreen extends BaseInteractionScreen {
                 text = text.substring(i);
                 i = text.indexOf(">");
                 String recipeJsonString = text.substring("<recipe".length(), i);
+
                 JsonObject recipeJson = new JsonParser().parse(recipeJsonString).getAsJsonObject();
                 int blockIngredients = recipeJson.get("blockIngredients").getAsInt();
-
                 JsonArray prefabsArray = recipeJson.get("itemIngredients").getAsJsonArray();
                 Prefab[] prefabs = new Prefab[prefabsArray.size()];
                 for (int x = 0; x < prefabsArray.size(); x++) {
@@ -226,10 +238,8 @@ public class BookScreen extends BaseInteractionScreen {
         arrowBackward.setVisible(true);
         title.setText("");
 
-        pageContent = createDocument(getTextLeft());
-        textLeft.navigateTo(pageContent);
-        pageContent = createDocument(getTextRight());
-        textRight.navigateTo(pageContent);
+        textLeft.navigateTo(createDocument(getTextLeft()));
+        textRight.navigateTo(createDocument(getTextRight()));
 
         if (getState().equals(State.CLOSED_RIGHT)) {
             coverRight.bindTexture(coverFrontR);
