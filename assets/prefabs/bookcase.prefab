@@ -1,20 +1,20 @@
 {
-    "Bookcase": {},
-    "Inventory": {
-        "privateToOwner": false,
-        "itemSlots": [
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-        ]
-    },
-    "RetainBlockInventory": {},
-    "PlaySoundAction": {
-        "sounds": "engine:click"
-    },
-    "InteractionTarget": {},
-    "InteractionScreen": {
-        "screen": "core:containerScreen"
-    },
-    "Network": {
-    }
+  "Bookcase": {},
+  "Inventory": {
+    "privateToOwner": false,
+    "itemSlots": [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    ]
+  },
+  "RetainBlockInventory": {},
+  "PlaySoundAction": {
+    "sounds": "engine:click"
+  },
+  "InteractionTarget": {},
+  "InteractionScreen": {
+    "screen": "core:containerScreen"
+  },
+  "Network": {
+  }
 }
