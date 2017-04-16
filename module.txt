@@ -1,7 +1,7 @@
 {
     "id" : "Books",
     "version" : "1.0.1-SNAPSHOT",
-    "author" : "bi0hax, Waterpicker",
+    "author" : "nihal111, bi0hax, Waterpicker",
     "displayName" : "Books and Bookcases",
     "description" : "This module introduces books and bookcases",
     "dependencies" : [
