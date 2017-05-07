@@ -9,8 +9,8 @@
   },
   "Book" : {
     "pages" : ["This is a recipe book. A recipe book contains recipes! No kidding",
-      "Following are some recipes <recipe {\"blockIngredients\": 2, \"itemIngredients\": [\"core:pickaxe\", \"core:pickaxe\"], \"blockResult\": null, \"itemResult\": \"core:pickaxe\", \"resultCount\": 1}>",
-      "{\"blockIngredients\": 2, \"itemIngredients\": [\"core:pickaxe\", \"core:pickaxe\"], \"blockResult\": null, \"itemResult\": \"core:pickaxe\", \"resultCount\": 1}",
+      "Following are some recipes <recipe Books:pickaxe>",
+      "Under the recipe tag lies- \"Books:pickaxe\"",
       "Do you like recipes?"],
     "tint" : [0, 0, 255, 255],
     "title" : "A Recipe Book"

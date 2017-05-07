@@ -30,6 +30,8 @@ import org.terasology.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyl
 import org.terasology.utilities.Assets;
 import org.terasology.world.block.Block;
 
+import java.util.List;
+
 public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
     private int indentAbove = 5;
     private int indentBelow = 5;
@@ -40,8 +42,8 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
     private ItemIcon[] ingredientIcons;
     private ItemIcon resultIcon;
 
-    public RecipeParagraph(Block[] blockIngredients, Prefab[] itemIngredients, Block blockResult, Prefab itemResult, int resultCount) {
-        if (blockIngredients.length != itemIngredients.length) {
+    public RecipeParagraph(Block[] blockIngredients, List<Prefab> itemIngredients, Block blockResult, Prefab itemResult, int resultCount) {
+        if (blockIngredients.length != itemIngredients.size()) {
             throw new IllegalArgumentException("Arrays have to be of the same length");
         }
         ingredientIcons = new ItemIcon[blockIngredients.length];
@@ -50,7 +52,7 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
             if (blockIngredients[i] != null) {
                 initializeForBlock(itemIcon, blockIngredients[i]);
             } else {
-                initializeForItem(itemIcon, itemIngredients[i]);
+                initializeForItem(itemIcon, itemIngredients.get(i));
             }
             ingredientIcons[i] = itemIcon;
         }

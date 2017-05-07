@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import org.terasology.books.DefaultDocumentData;
 import org.terasology.books.RecipeParagraph;
 import org.terasology.books.logic.BookComponent;
+import org.terasology.books.logic.BookRecipeComponent;
 import org.terasology.books.logic.EditBooksComponent;
 import org.terasology.entitySystem.entity.EntityManager;
 import org.terasology.entitySystem.entity.EntityRef;
@@ -153,27 +154,9 @@ public class BookScreen extends BaseInteractionScreen {
                 paragraphs.add(createTextParagraph(text.substring(0, i)));
                 text = text.substring(i);
                 i = text.indexOf(">");
-                String recipeJsonString = text.substring("<recipe".length(), i);
-
-                JsonObject recipeJson = new JsonParser().parse(recipeJsonString).getAsJsonObject();
-                int blockIngredients = recipeJson.get("blockIngredients").getAsInt();
-                JsonArray prefabsArray = recipeJson.get("itemIngredients").getAsJsonArray();
-                Prefab[] prefabs = new Prefab[prefabsArray.size()];
-                for (int x = 0; x < prefabsArray.size(); x++) {
-                    String prefab = prefabsArray.get(x).getAsString();
-                    prefabs[x] = prefabManager.getPrefab(prefab);
-                }
-                Block blockResult = null;
-                if (!recipeJson.get("blockResult").isJsonNull()) {
-                    blockResult = blockManager.getBlockFamily(recipeJson.get("blockResult").getAsString()).getArchetypeBlock();
-                }
-                Prefab itemResult = null;
-                if (!recipeJson.get("itemResult").isJsonNull()) {
-                    itemResult = prefabManager.getPrefab(recipeJson.get("itemResult").getAsString());
-                }
-                int resultCount = recipeJson.get("resultCount").getAsInt();
-                paragraphs.add(createRecipeParagraph(blockIngredients, prefabs, blockResult, itemResult, resultCount));
-
+                // Capture the text following the "<recipe" tag and remove spaces
+                String recipePrefabName = text.substring("<recipe".length(), i).replaceAll("\\s","");
+                paragraphs.add(createRecipeParagraph(recipePrefabName));
                 text = text.substring(i + 1);
             } else {
                 paragraphs.add(createTextParagraph(text));
@@ -187,8 +170,10 @@ public class BookScreen extends BaseInteractionScreen {
         return HTMLLikeParser.parseHTMLLikeParagraph(null, "<c " + "198"/*Color.BLACK.getRepresentation()*/ + ">" + text + "</c>");
     }
 
-    private static RecipeParagraph createRecipeParagraph(int blockIngredients, Prefab[] prefabs, Block blockResult, Prefab itemResult, int resultCount) {
-        return new RecipeParagraph(new Block[blockIngredients], prefabs, blockResult, itemResult, resultCount);
+    private static RecipeParagraph createRecipeParagraph(String prefabName) {
+        Prefab recipePrefab = prefabManager.getPrefab(prefabName);
+        BookRecipeComponent bookRecipeComponent = recipePrefab.getComponent(BookRecipeComponent.class);
+        return new RecipeParagraph(new Block[bookRecipeComponent.blockIngredients], bookRecipeComponent.itemIngredients, bookRecipeComponent.blockResult, bookRecipeComponent.itemResult, bookRecipeComponent.resultCount);
     }
 
     static State getState() {
