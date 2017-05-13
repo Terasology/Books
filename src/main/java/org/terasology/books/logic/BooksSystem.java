@@ -24,9 +24,16 @@ import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.InventoryManager;
 import org.terasology.logic.players.event.OnPlayerSpawnedEvent;
 import org.terasology.registry.In;
+import org.terasology.rendering.nui.HorizontalAlign;
+import org.terasology.rendering.nui.widgets.browser.data.ParagraphData;
+import org.terasology.rendering.nui.widgets.browser.data.basic.HTMLLikeParser;
+import org.terasology.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
 import org.terasology.world.WorldProvider;
 import org.terasology.world.block.BlockManager;
 import org.terasology.world.block.items.BlockItemFactory;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RegisterSystem
 public class BooksSystem extends BaseComponentSystem {

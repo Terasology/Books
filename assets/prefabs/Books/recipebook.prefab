@@ -1,0 +1,22 @@
+{
+  "parent" : "engine:iconItem",
+  "Item" : {
+    "icon" : "engine:items#BlueBook",
+    "usage" : "NONE"
+  },
+  "DisplayName" : {
+    "name" : "Recipe Book"
+  },
+  "Book" : {
+    "pages" : ["This is a recipe book. A recipe book contains recipes! No kidding",
+      "Following are some recipes <recipe Books:pickaxe>",
+      "Under the recipe tag lies- \"Books:pickaxe\"",
+      "Do you like recipes?"],
+    "tint" : [0, 0, 255, 255],
+    "title" : "A Recipe Book"
+  },
+  "InteractionTarget": {},
+  "InteractionScreen": {
+    "screen": "Books:BookScreen"
+  }
+}

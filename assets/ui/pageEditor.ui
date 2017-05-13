@@ -1,0 +1,54 @@
+{
+  "type": "PageEditor",
+  "contents": {
+    "type": "relativeLayout",
+    "contents": [
+      {
+        "type": "UIText",
+        "id": "pageText",
+        "text": "efaefaegaegaegaeg",
+        "layoutInfo": {
+          "width": 350,
+          "height": 345,
+          "position-horizontal-center": {},
+          "position-vertical-center": {}
+        },
+        "multiline": true
+      },
+      {
+        "type": "UIButton",
+        "id": "save",
+        "layoutInfo": {
+          "width": 80,
+          "height": 27,
+          "position-left": {
+            "widget": "pageText",
+            "offset": 80
+          },
+          "position-bottom": {
+            "widget": "pageText",
+            "offset": -27
+          }
+        },
+        "text": "Save"
+      },
+      {
+        "type": "UIButton",
+        "id": "exit",
+        "layoutInfo": {
+          "width": 80,
+          "height": 27,
+          "position-right": {
+            "widget": "pageText",
+            "offset": 80
+          },
+          "position-bottom": {
+            "widget": "pageText",
+            "offset": -27
+          }
+        },
+        "text": "Exit"
+      }
+    ]
+  }
+}

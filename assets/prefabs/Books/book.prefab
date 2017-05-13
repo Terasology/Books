@@ -1,0 +1,17 @@
+{
+  "parent" : "engine:iconItem",
+  "Item" : {
+    "icon" : "engine:items#brownBook",
+    "usage" : "ON_USER"
+  },
+  "DisplayName" : {
+    "name" : "Book"
+  },
+  "Book" : {
+    "tint" : [245, 222, 179, 255]
+  },
+  "InteractionTarget": {},
+  "InteractionScreen": {
+    "screen": "Books:BookScreen"
+  }
+}

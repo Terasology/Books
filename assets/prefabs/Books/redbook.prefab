@@ -1,0 +1,21 @@
+{
+  "parent" : "engine:iconItem",
+  "Item" : {
+    "icon" : "engine:items#RedBook",
+    "usage" : "ON_USER"
+  },
+  "DisplayName" : {
+    "name" : "Red Book"
+  },
+  "Book" : {
+    "pages" : ["This book is",
+           "read-only"],
+    "tint" : [255, 0, 0, 255],
+    "readOnly" : true,
+    "title" : "Red Read-Only Book"
+  },
+  "InteractionTarget": {},
+  "InteractionScreen": {
+    "screen": "Books:BookScreen"
+  }
+}
