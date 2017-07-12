@@ -18,6 +18,8 @@ package org.terasology.books.logic;
 
 import com.google.common.collect.Lists;
 import org.terasology.entitySystem.Component;
+import org.terasology.network.FieldReplicateType;
+import org.terasology.network.Replicate;
 import org.terasology.rendering.nui.Color;
 
 import java.util.ArrayList;
@@ -33,10 +35,13 @@ public class BookComponent implements Component {
     public Color tint = Color.WHITE;
     public BookType type = BookType.Written;
 
+    @Replicate
     public boolean readOnly;
+    @Replicate
     public String title;
 
     //The list of page's length must be even or thing will explode.
+    @Replicate(FieldReplicateType.OWNER_TO_SERVER)
     public List<String> pages = new ArrayList<>(Lists.newArrayList("", ""));
 }
 
