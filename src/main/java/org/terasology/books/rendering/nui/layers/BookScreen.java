@@ -167,7 +167,7 @@ public class BookScreen extends BaseInteractionScreen {
     }
 
     private static ParagraphData createTextParagraph(String text) {
-        return HTMLLikeParser.parseHTMLLikeParagraph(null, "<c " + "198"/*Color.BLACK.getRepresentation()*/ + ">" + text + "</c>");
+        return HTMLLikeParser.parseHTMLLikeParagraph(null, "<c " + "198"/*Color.BLACK.getRepresentation()*/ + ">" + text.replace("\n", "<l>") + "</c>");
     }
 
     private static RecipeParagraph createRecipeParagraph(String prefabName) {
