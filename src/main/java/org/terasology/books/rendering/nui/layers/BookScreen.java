@@ -173,7 +173,7 @@ public class BookScreen extends BaseInteractionScreen {
     private static RecipeParagraph createRecipeParagraph(String prefabName) {
         Prefab recipePrefab = prefabManager.getPrefab(prefabName);
         BookRecipeComponent bookRecipeComponent = recipePrefab.getComponent(BookRecipeComponent.class);
-        return new RecipeParagraph(new Block[bookRecipeComponent.blockIngredients], bookRecipeComponent.itemIngredients, bookRecipeComponent.blockResult, bookRecipeComponent.itemResult, bookRecipeComponent.resultCount);
+        return new RecipeParagraph(bookRecipeComponent.blockIngredientsList, bookRecipeComponent.itemIngredients, bookRecipeComponent.blockResult, bookRecipeComponent.itemResult, bookRecipeComponent.resultCount);
     }
 
     static State getState() {

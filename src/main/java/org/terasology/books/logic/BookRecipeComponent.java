@@ -25,6 +25,7 @@ import java.util.List;
 
 public class BookRecipeComponent implements Component {
     public int blockIngredients;
+    public List<Block> blockIngredientsList;
     public List<Prefab> itemIngredients = new ArrayList<>();
     public Block blockResult = null;
     public Prefab itemResult;

@@ -42,15 +42,12 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
     private ItemIcon[] ingredientIcons;
     private ItemIcon resultIcon;
 
-    public RecipeParagraph(Block[] blockIngredients, List<Prefab> itemIngredients, Block blockResult, Prefab itemResult, int resultCount) {
-        if (blockIngredients.length != itemIngredients.size()) {
-            throw new IllegalArgumentException("Arrays have to be of the same length");
-        }
-        ingredientIcons = new ItemIcon[blockIngredients.length];
+    public RecipeParagraph(List<Block> blockIngredients, List<Prefab> itemIngredients, Block blockResult, Prefab itemResult, int resultCount) {
+        ingredientIcons = new ItemIcon[blockIngredients.size()];
         for (int i = 0; i < ingredientIcons.length; i++) {
             ItemIcon itemIcon = new ItemIcon();
-            if (blockIngredients[i] != null) {
-                initializeForBlock(itemIcon, blockIngredients[i]);
+            if (blockIngredients.get(i) != null) {
+                initializeForBlock(itemIcon, blockIngredients.get(i));
             } else {
                 initializeForItem(itemIcon, itemIngredients.get(i));
             }
