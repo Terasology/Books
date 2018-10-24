@@ -3,8 +3,8 @@
 This module adds the ability to read and write books, as well as store them in bookcases. This module also adds the ability to edit books and their contents.
 
 The Following Types of Components Can Be Made:
-* Book
-* Bookcase
+* `Book`
+* `Bookcase`
 
 
 # Contribution
@@ -34,7 +34,7 @@ To create a book, create a prefab similar to ones found [Here](https://github.co
   }
 } 
 ```
-where book.png is the name of the icon in the prefabs folder. Display name and Book contain information relevant to how the book is displayed. InteractionScreen contains information relevant to how the book is interacted with. All books should have usage set to "ON_USER".
+where `book.png` is the name of the icon in the prefabs folder. `DisplayName` and `Book` contain information relevant to how the book is displayed. `InteractionScreen` contains information relevant to how the book is interacted with. All books should have usage set to `ON_USER`.
 
 ## Creating a bookcase
 
@@ -61,7 +61,7 @@ To create a bookcase, create a prefab similar to the one found [Here](https://gi
   }
 }
 ```
-where itemSlots should be filled with 0s as it is empty. "privateToOwner" details whether or not other users have access to the bookshelf. "PlaySoundAction" contains the sound played for when the bookshelf is opened. "InteractionScreen" contains information of how the bookshelf should be interacted with.
+where `itemSlots` should be filled with 0s as it is empty. `privateToOwner` details whether or not other users have access to the bookshelf. `PlaySoundAction` contains the sound played for when the bookshelf is opened. `InteractionScreen` contains information of how the bookshelf should be interacted with.
 
 
 # Credits for images:
