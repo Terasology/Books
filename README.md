@@ -9,7 +9,7 @@ The Following Types of Components Can Be Made:
 
 # Contribution
 
-Fork and clone this repository locally
+Use `groovyw module get Books`to fetch the module
 
 
 ## Creating a Book
