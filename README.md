@@ -64,5 +64,5 @@ To create a bookcase, create a prefab similar to the one found [Here](https://gi
 where itemSlots should be filled with 0s as it is empty. "privateToOwner" details whether or not other users have access to the bookshelf. "PlaySoundAction" contains the sound played for when the bookshelf is opened. "InteractionScreen" contains information of how the bookshelf should be interacted with.
 
 
-#Credits for images:
+# Credits for images:
 - Quill - https://openclipart.org/detail/262818/vintage-feather-inkwell
