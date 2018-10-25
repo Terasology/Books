@@ -23,12 +23,23 @@ import org.terasology.world.block.Block;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Used in a prefab to represent a recipe. The prefab can then be inserted in a book using a &ltrecipe&gt tag inside a page as such:
+ * <br>
+ * <code>&ltrecipe module:prefab&gt</code>
+ */
 public class BookRecipeComponent implements Component {
+	/** The number of ingredients used in this recipe. */
     public int blockIngredients;
+    /** Blocks used in this recipe, if any. */
     public List<Block> blockIngredientsList;
+    /** Items used in this recipe, if any. */
     public List<Prefab> itemIngredients = new ArrayList<>();
+    /** The result of the recipe, if it is a block. If it is an item, this should be left empty. */
     public Block blockResult = null;
+    /** The result of the recipe, if it is an item. If it is a block, this should be left empty. */
     public Prefab itemResult;
+    /** The amount of blocks/items produced by this recipe. */
     public int resultCount;
 }
 

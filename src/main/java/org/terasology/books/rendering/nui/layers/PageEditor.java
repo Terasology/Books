@@ -23,6 +23,9 @@ import org.terasology.rendering.nui.NUIManager;
 import org.terasology.rendering.nui.widgets.UIButton;
 import org.terasology.rendering.nui.widgets.UIText;
 
+/**
+ * UI for editing pages.
+ */
 public class PageEditor extends CoreScreenLayer {
 
     @In
@@ -32,6 +35,9 @@ public class PageEditor extends CoreScreenLayer {
     private UIButton save;
     private UIButton exit;
 
+    /**
+     * Initializes the UI by attatching events to the save and exit buttons.
+     */
     @Override
     public void initialise() {
         pageText = find("pageText", UIText.class);
@@ -56,6 +62,9 @@ public class PageEditor extends CoreScreenLayer {
         exit.subscribe(button -> nuiManager.closeScreen(this));
     }
 
+    /**
+     * Initializes the text in the UI to the current text of the page being edited.
+     */
     @Override
     public void onOpened() {
         if (BookScreen.leftPageEditing) {

@@ -18,6 +18,9 @@ package org.terasology.books.logic;
 
 import org.terasology.entitySystem.Component;
 
+/**
+ * Marker component indicating that a block with an inventory should act as a bookshelf, storing only books.
+ */
 public class BookcaseComponent implements Component {
 }
 

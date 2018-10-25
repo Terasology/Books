@@ -24,28 +24,46 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Holds the data for a page of a book, consisting of a list of paragraphs.
+ */
 public class DefaultDocumentData implements DocumentData {
     private DocumentRenderStyle documentRenderStyle;
     private List<ParagraphData> paragraphs = new LinkedList<>();
 
+    /**
+     * Creates a new instance with the specified render style.
+     */
     public DefaultDocumentData(DocumentRenderStyle documentRenderStyle) {
         this.documentRenderStyle = documentRenderStyle;
     }
 
+    /**
+     * Gets the render style of this page.
+     */
     @Override
     public DocumentRenderStyle getDocumentRenderStyle() {
         return documentRenderStyle;
     }
 
+    /**
+     * Gets an unmodifiable list of the paragraphs on this page.
+     */
     @Override
     public Collection<ParagraphData> getParagraphs() {
         return Collections.unmodifiableList(paragraphs);
     }
 
+    /**
+     * Adds another paragraph to this page.
+     */
     public void addParagraph(ParagraphData paragraph) {
         paragraphs.add(paragraph);
     }
 
+    /**
+     * Adds several paragraphs to this page.
+     */
     public void addParagraphs(Collection<ParagraphData> paragraphsToAdd) {
         if (paragraphsToAdd != null) {
             paragraphs.addAll(paragraphsToAdd);
