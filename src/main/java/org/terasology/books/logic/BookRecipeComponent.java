@@ -24,9 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Used in a prefab to represent a recipe. The prefab can then be inserted in a book using a &ltrecipe&gt tag inside a page as such:
+ * Used in a prefab to represent a recipe. The prefab can then be inserted in a book using a <recipe> tag inside a page as such:
  * <br>
- * <code>&ltrecipe module:prefab&gt</code>
+ * <code><recipe module:prefab></code>
  */
 public class BookRecipeComponent implements Component {
 	/** The number of ingredients used in this recipe. */

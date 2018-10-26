@@ -76,7 +76,11 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
     }
 
     /**
-     * This paragraph's horizontal alignment will always be centered.
+     * Gets the render style for this paragraph.
+     * <br>
+     * Note that this paragraph's horizontal alignment will always be centered.
+     * 
+     * @return This paragraph's render style.
      */
     @Override
     public ParagraphRenderStyle getParagraphRenderStyle() {
@@ -88,6 +92,11 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
         };
     }
 
+    /**
+     * Gets the renderable paragraph for this paragraph, a.k.a. this object.
+     * 
+     * @return this object.
+     */
     @Override
     public ParagraphRenderable getParagraphContents() {
         return this;
@@ -122,7 +131,7 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
     }
 
     /**
-     * {@inheritDoc}
+     * Renders the paragraph.
      * <br>
      * The ingredients are drawn in a strip from left to right, followed by the result.
      */
@@ -142,10 +151,14 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
     }
 
     /**
+     * Gets the preferred height of the paragraph.
+     * 
      * @param defaultStyle Not used
      * @param yStart Not used
      * @param containerRenderSpace Not used
      * @param sideIndents Not used
+     * 
+     * @return The y dimension of this paragraph's preferred size.
      */
     @Override
     public int getPreferredContentsHeight(ParagraphRenderStyle defaultStyle, int yStart, ContainerRenderSpace containerRenderSpace, int sideIndents) {
@@ -153,7 +166,11 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
     }
 
     /**
+     * Gets the minimum width of this paragraph.
+     * 
      * @param defaultStyle Not used
+     * 
+     * @return The x dimension of this paragraph's preferred size.
      */
     @Override
     public int getContentsMinWidth(ParagraphRenderStyle defaultStyle) {

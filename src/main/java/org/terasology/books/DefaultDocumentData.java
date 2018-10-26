@@ -33,6 +33,8 @@ public class DefaultDocumentData implements DocumentData {
 
     /**
      * Creates a new instance with the specified render style.
+     * 
+     * @param documentRenderStyle The render style to use.
      */
     public DefaultDocumentData(DocumentRenderStyle documentRenderStyle) {
         this.documentRenderStyle = documentRenderStyle;
@@ -40,6 +42,8 @@ public class DefaultDocumentData implements DocumentData {
 
     /**
      * Gets the render style of this page.
+     * 
+     * @return The render style.
      */
     @Override
     public DocumentRenderStyle getDocumentRenderStyle() {
@@ -47,7 +51,9 @@ public class DefaultDocumentData implements DocumentData {
     }
 
     /**
-     * Gets an unmodifiable list of the paragraphs on this page.
+     * Gets the paragraphs on this page.
+     * 
+     * @return an unmodifiable list of the paragraphs on this page.
      */
     @Override
     public Collection<ParagraphData> getParagraphs() {
@@ -56,6 +62,8 @@ public class DefaultDocumentData implements DocumentData {
 
     /**
      * Adds another paragraph to this page.
+     * 
+     * @param paragraph The paragraph to add.
      */
     public void addParagraph(ParagraphData paragraph) {
         paragraphs.add(paragraph);
@@ -63,6 +71,8 @@ public class DefaultDocumentData implements DocumentData {
 
     /**
      * Adds several paragraphs to this page.
+     * 
+     * @param paragraphsToAdd A collection of paragraphs to add.
      */
     public void addParagraphs(Collection<ParagraphData> paragraphsToAdd) {
         if (paragraphsToAdd != null) {
