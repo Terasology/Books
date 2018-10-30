@@ -29,17 +29,30 @@ import java.util.List;
  * <code><recipe module:prefab></code>
  */
 public class BookRecipeComponent implements Component {
-	/** The number of ingredients used in this recipe. */
+    /**
+     * The number of ingredients used in this recipe.
+     */
     public int blockIngredients;
-    /** Blocks used in this recipe, if any. */
-    public List<Block> blockIngredientsList;
-    /** Items used in this recipe, if any. */
+    /**
+     * Blocks used in this recipe, if any.
+     */
+    public List<Block> blockIngredientsList = new ArrayList<>();
+    
+    /**
+     * Items used in this recipe, if any.
+     */
     public List<Prefab> itemIngredients = new ArrayList<>();
-    /** The result of the recipe, if it is a block. If it is an item, this should be left empty. */
+    /**
+     * The result of the recipe, if it is a block. If it is an item, this should be left empty.
+     */
     public Block blockResult = null;
-    /** The result of the recipe, if it is an item. If it is a block, this should be left empty. */
+    /**
+     * The result of the recipe, if it is an item. If it is a block, this should be left empty.
+     */
     public Prefab itemResult;
-    /** The amount of blocks/items produced by this recipe. */
+    /**
+     * The amount of blocks/items produced by this recipe.
+     */
     public int resultCount;
 }
 

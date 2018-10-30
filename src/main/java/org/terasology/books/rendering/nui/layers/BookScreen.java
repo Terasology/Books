@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.terasology.books.rendering.nui.layers;
 
 import com.google.common.base.Joiner;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.terasology.books.DefaultDocumentData;
@@ -36,7 +34,11 @@ import org.terasology.logic.inventory.InventoryUtils;
 import org.terasology.logic.players.LocalPlayer;
 import org.terasology.registry.In;
 import org.terasology.rendering.assets.texture.TextureRegion;
-import org.terasology.rendering.nui.*;
+import org.terasology.rendering.nui.BaseInteractionScreen;
+import org.terasology.rendering.nui.Color;
+import org.terasology.rendering.nui.HorizontalAlign;
+import org.terasology.rendering.nui.NUIManager;
+import org.terasology.rendering.nui.WidgetUtil;
 import org.terasology.rendering.nui.databinding.Binding;
 import org.terasology.rendering.nui.databinding.DefaultBinding;
 import org.terasology.rendering.nui.widgets.UIButton;
@@ -48,7 +50,6 @@ import org.terasology.rendering.nui.widgets.browser.data.basic.HTMLLikeParser;
 import org.terasology.rendering.nui.widgets.browser.ui.BrowserWidget;
 import org.terasology.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
 import org.terasology.utilities.Assets;
-import org.terasology.world.block.Block;
 import org.terasology.world.block.BlockManager;
 
 import java.util.ArrayList;
@@ -173,7 +174,8 @@ public class BookScreen extends BaseInteractionScreen {
     private static RecipeParagraph createRecipeParagraph(String prefabName) {
         Prefab recipePrefab = prefabManager.getPrefab(prefabName);
         BookRecipeComponent bookRecipeComponent = recipePrefab.getComponent(BookRecipeComponent.class);
-        return new RecipeParagraph(bookRecipeComponent.blockIngredientsList, bookRecipeComponent.itemIngredients, bookRecipeComponent.blockResult, bookRecipeComponent.itemResult, bookRecipeComponent.resultCount);
+        return new RecipeParagraph(bookRecipeComponent.blockIngredients, bookRecipeComponent.blockIngredientsList, bookRecipeComponent.itemIngredients,
+                bookRecipeComponent.blockResult, bookRecipeComponent.itemResult, bookRecipeComponent.resultCount);
     }
 
     static State getState() {
