@@ -59,10 +59,10 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
         ingredientIcons = new ItemIcon[blockIngredients.size()];
         for (int i = 0; i < ingredientIcons.length; i++) {
             ItemIcon itemIcon = new ItemIcon();
-            if (i < blockIngredientsList.size()) {
-                initializeForBlock(itemIcon, blockIngredientsList.get(i));
+            if (blockIngredients.get(i) != null) {
+                initializeForBlock(itemIcon, blockIngredients.get(i));
             } else {
-                initializeForItem(itemIcon, itemIngredients.get(i - blockIngredientsList.size()));
+                initializeForItem(itemIcon, itemIngredients.get(i));
             }
             ingredientIcons[i] = itemIcon;
         }
