@@ -1,6 +1,6 @@
 {
     "inherit" : "default",
-    "font" : "Books:default",
+    "font" : "NotoSans-Regular",
     "text-shadowed" : false,
     "elements" : {
         "UILabel" : {
