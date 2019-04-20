@@ -1,21 +1,24 @@
 # Books and Bookcases
 
-This module adds the ability to read and write books, as well as store them in bookcases. This module also adds the ability to edit books and their contents.
+This module adds the ability to read and write books, as well as store them in bookcases.
+This module also adds the ability to edit books and their contents.
 
-The Following Types of Components Can Be Made:
+The following types of components can be made:
 * `Book`
 * `Bookcase`
 
 
-# Contribution
+## Contribution
 
-Use `groovyw module get Books`to fetch the module
+Use `groovyw module get Books`to fetch the module.
 
 
-## Creating a Book
+### Creating a Book
 
-To create a book, create a prefab similar to ones found [Here](https://github.com/Terasology/Books/tree/master/assets/prefabs) and add the icon from [Here](https://github.com/Terasology/Books/tree/master/assets/textures) . For instance, to create a book called "1984", the prefab should look like:
-```java
+To create a book, create a prefab similar to ones found [Here](https://github.com/Terasology/Books/tree/master/assets/prefabs) and add the icon from [Here](https://github.com/Terasology/Books/tree/master/assets/textures).
+For instance, to create a book called "1984", the prefab should look like:
+
+```json
 {
   "parent" : "engine:iconItem",
   "Item" : {
@@ -34,12 +37,18 @@ To create a book, create a prefab similar to ones found [Here](https://github.co
   }
 } 
 ```
-where `book.png` is the name of the icon in the prefabs folder. `DisplayName` and `Book` contain information relevant to how the book is displayed. `InteractionScreen` contains information relevant to how the book is interacted with. All books should have usage set to `ON_USER`.
 
-## Creating a bookcase
+where `book.png` is the name of the icon in the prefabs folder.
+`DisplayName` and `Book` contain information relevant to how the book is displayed.
+`InteractionScreen` contains information relevant to how the book is interacted with.
+All books should have usage set to `ON_USER`.
 
-To create a bookcase, create a prefab similar to the one found [Here](https://github.com/Terasology/Books/tree/master/assets/prefabs) . For example,  a default bookshelf should look like:
-```java
+### Creating a bookcase
+
+To create a bookcase, create a prefab similar to the one found [Here](https://github.com/Terasology/Books/tree/master/assets/prefabs).
+For example, a default bookshelf should look like:
+
+```json
 {
   "Bookcase": {},
   "Inventory": {
@@ -55,14 +64,18 @@ To create a bookcase, create a prefab similar to the one found [Here](https://gi
   },
   "InteractionTarget": {},
   "InteractionScreen": {
-    "screen": "core:containerScreen"
+    "screen": "inventory:containerScreen"
   },
   "Network": {
   }
 }
 ```
-where `itemSlots` should be filled with 0s as it is empty. `privateToOwner` details whether or not other users have access to the bookshelf. `PlaySoundAction` contains the sound played for when the bookshelf is opened. `InteractionScreen` contains information of how the bookshelf should be interacted with.
+
+where `itemSlots` should be filled with 0s as it is empty.
+`privateToOwner` details whether or not other users have access to the bookshelf.
+`PlaySoundAction` contains the sound played for when the bookshelf is opened.
+`InteractionScreen` contains information of how the bookshelf should be interacted with.
 
 
-# Credits for images:
+## Credits for images:
 - Quill - https://openclipart.org/detail/262818/vintage-feather-inkwell
