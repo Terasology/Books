@@ -1,11 +1,12 @@
 {
     "id" : "Books",
-    "version" : "1.0.2-SNAPSHOT",
+    "version" : "1.0.3-SNAPSHOT",
     "author" : "nihal111, bi0hax, Waterpicker",
     "displayName" : "Books and Bookcases",
     "description" : "This module introduces books and bookcases",
     "dependencies" : [
-        {"id" : "Core", "minVersion" : "2.0.0"}
+        {"id" : "Core", "minVersion" : "2.0.0"},
+        {"id" : "CoreAssets", "minVersion" : "1.0.0"}
     ],
     "isServerSideOnly" : false
 }

@@ -1,6 +1,6 @@
 {
     "tiles" : {
-        "topBottom" : "core:ChestTopBottom"
+        "topBottom" : "CoreAssets:ChestTopBottom"
     },
     "entity" : {
         "prefab" : "books:bookcase"
