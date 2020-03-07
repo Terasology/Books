@@ -5,7 +5,7 @@
     "displayName" : "Books and Bookcases",
     "description" : "This module introduces books and bookcases",
     "dependencies" : [
-        {"id" : "Core", "minVersion" : "2.0.0"},
+        {"id" : "Core", "minVersion" : "3.0.0"},
         {"id" : "CoreAssets", "minVersion" : "1.0.0"}
     ],
     "isServerSideOnly" : false
