@@ -2,10 +2,10 @@
   "BookRecipe": {
     "blockIngredients": 2,
     "itemIngredients": [
-      "core:pickaxe",
-      "core:pickaxe"
+      "CoreItems:pickaxe",
+      "CoreItems:pickaxe"
     ],
-    "itemResult": "core:pickaxe",
+    "itemResult": "CoreItems:pickaxe",
     "resultCount": 1
   }
 }
