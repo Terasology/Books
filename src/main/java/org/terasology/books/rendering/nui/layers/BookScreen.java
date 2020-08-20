@@ -1,18 +1,5 @@
-/*
- * Copyright 2016 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 
 package org.terasology.books.rendering.nui.layers;
 
@@ -32,18 +19,18 @@ import org.terasology.logic.clipboard.ClipboardManager;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.InventoryUtils;
 import org.terasology.logic.players.LocalPlayer;
+import org.terasology.nui.UITextureRegion;
 import org.terasology.registry.In;
-import org.terasology.rendering.assets.texture.TextureRegion;
 import org.terasology.rendering.nui.BaseInteractionScreen;
-import org.terasology.rendering.nui.Color;
-import org.terasology.rendering.nui.HorizontalAlign;
+import org.terasology.nui.Color;
+import org.terasology.nui.HorizontalAlign;
 import org.terasology.rendering.nui.NUIManager;
-import org.terasology.rendering.nui.WidgetUtil;
-import org.terasology.rendering.nui.databinding.Binding;
-import org.terasology.rendering.nui.databinding.DefaultBinding;
-import org.terasology.rendering.nui.widgets.UIButton;
-import org.terasology.rendering.nui.widgets.UIImage;
-import org.terasology.rendering.nui.widgets.UILabel;
+import org.terasology.nui.WidgetUtil;
+import org.terasology.nui.databinding.Binding;
+import org.terasology.nui.databinding.DefaultBinding;
+import org.terasology.nui.widgets.UIButton;
+import org.terasology.nui.widgets.UIImage;
+import org.terasology.nui.widgets.UILabel;
 import org.terasology.rendering.nui.widgets.browser.data.DocumentData;
 import org.terasology.rendering.nui.widgets.browser.data.ParagraphData;
 import org.terasology.rendering.nui.widgets.browser.data.basic.HTMLLikeParser;
@@ -108,13 +95,13 @@ public class BookScreen extends BaseInteractionScreen {
     private static UIButton arrowForward;
     private static UIButton arrowBackward;
     private static UILabel title;
-    private static Binding<TextureRegion> coverBackL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorLeft").get());
-    private static Binding<TextureRegion> coverBackR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorRight").get());
-    private static Binding<TextureRegion> coverFrontL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorLeft").get());
-    private static Binding<TextureRegion> coverFrontR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorRight").get());
-    private static Binding<TextureRegion> pageL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageLeft").get());
-    private static Binding<TextureRegion> pageR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageRight").get());
-    private static Binding<TextureRegion> blank = new DefaultBinding<>(Assets.getTextureRegion("Books:blank").get());
+    private static Binding<UITextureRegion> coverBackL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorLeft").get());
+    private static Binding<UITextureRegion> coverBackR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorRight").get());
+    private static Binding<UITextureRegion> coverFrontL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorLeft").get());
+    private static Binding<UITextureRegion> coverFrontR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorRight").get());
+    private static Binding<UITextureRegion> pageL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageLeft").get());
+    private static Binding<UITextureRegion> pageR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageRight").get());
+    private static Binding<UITextureRegion> blank = new DefaultBinding<>(Assets.getTextureRegion("Books:blank").get());
 
     private String status;
     private UIButton save;

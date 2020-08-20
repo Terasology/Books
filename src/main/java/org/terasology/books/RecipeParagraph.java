@@ -1,28 +1,15 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 package org.terasology.books;
 
 import org.terasology.books.logic.BookRecipeComponent;
 import org.terasology.entitySystem.prefab.Prefab;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.ItemComponent;
-import org.terasology.math.geom.Rect2i;
-import org.terasology.math.geom.Vector2i;
-import org.terasology.rendering.nui.Canvas;
-import org.terasology.rendering.nui.HorizontalAlign;
+import org.joml.Vector2i;
+import org.terasology.math.JomlUtil;
+import org.terasology.nui.Canvas;
+import org.terasology.nui.HorizontalAlign;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
 import org.terasology.rendering.nui.widgets.browser.data.ParagraphData;
 import org.terasology.rendering.nui.widgets.browser.data.basic.flow.ContainerRenderSpace;
@@ -143,12 +130,12 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
         int x = startPos.x + horizontalAlign.getOffset(drawingWidth, containerRenderSpace.getWidthForVerticalPosition(startPos.y));
         int y = startPos.y + indentAbove;
         for (int i = 0; i < ingredientIcons.length; i++) {
-            canvas.drawWidget(ingredientIcons[i], Rect2i.createFromMinAndSize(x, y, iconSize, iconSize));
+            canvas.drawWidget(ingredientIcons[i], JomlUtil.rectangleiFromMinAndSize(x, y, iconSize, iconSize));
             x += iconSize + ingredientSpacing;
         }
         x -= ingredientSpacing;
         x += resultSpacing;
-        canvas.drawWidget(resultIcon, Rect2i.createFromMinAndSize(x, y, iconSize, iconSize));
+        canvas.drawWidget(resultIcon, JomlUtil.rectangleiFromMinAndSize(x, y, iconSize, iconSize));
     }
 
     /**
