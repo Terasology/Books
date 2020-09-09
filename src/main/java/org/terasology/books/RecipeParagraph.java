@@ -2,21 +2,21 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.books;
 
-import org.terasology.books.logic.BookRecipeComponent;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.logic.common.DisplayNameComponent;
-import org.terasology.logic.inventory.ItemComponent;
 import org.joml.Vector2i;
-import org.terasology.math.JomlUtil;
+import org.terasology.books.logic.BookRecipeComponent;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.logic.common.DisplayNameComponent;
+import org.terasology.engine.logic.inventory.ItemComponent;
+import org.terasology.engine.math.JomlUtil;
+import org.terasology.engine.rendering.nui.widgets.browser.data.ParagraphData;
+import org.terasology.engine.rendering.nui.widgets.browser.data.basic.flow.ContainerRenderSpace;
+import org.terasology.engine.rendering.nui.widgets.browser.ui.ParagraphRenderable;
+import org.terasology.engine.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
+import org.terasology.engine.utilities.Assets;
+import org.terasology.engine.world.block.Block;
+import org.terasology.inventory.rendering.nui.layers.ingame.ItemIcon;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.HorizontalAlign;
-import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
-import org.terasology.rendering.nui.widgets.browser.data.ParagraphData;
-import org.terasology.rendering.nui.widgets.browser.data.basic.flow.ContainerRenderSpace;
-import org.terasology.rendering.nui.widgets.browser.ui.ParagraphRenderable;
-import org.terasology.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
-import org.terasology.utilities.Assets;
-import org.terasology.world.block.Block;
 
 import java.util.List;
 
@@ -24,26 +24,29 @@ import java.util.List;
  * Used to display recipes alongside text in a book by putting it in a paragraph.
  */
 public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
-    private int indentAbove = 5;
-    private int indentBelow = 5;
-    private int ingredientSpacing = 3;
-    private int resultSpacing = 30;
+    private final int indentAbove = 5;
+    private final int indentBelow = 5;
+    private final int ingredientSpacing = 3;
+    private final int resultSpacing = 30;
 
-    private int iconSize = 64;
-    private ItemIcon[] ingredientIcons;
-    private ItemIcon resultIcon;
+    private final int iconSize = 64;
+    private final ItemIcon[] ingredientIcons;
+    private final ItemIcon resultIcon;
 
 
     /**
      * Creates a new RecipeParagraph using data from a {@link BookRecipeComponent}.
-     * 
+     *
      * @param blockIngredients Blocks used in this recipe, if any.
      * @param itemIngredients Items used in this recipe, if any.
-     * @param blockResult The result of the recipe, if it is a block. If it is an item, this should be left empty.
-     * @param itemResult The result of the recipe, if it is an item. If it is a block, this should be left empty.
+     * @param blockResult The result of the recipe, if it is a block. If it is an item, this should be left
+     *         empty.
+     * @param itemResult The result of the recipe, if it is an item. If it is a block, this should be left
+     *         empty.
      * @param resultCount The amount of blocks/items produced by this recipe.
      */
-    public RecipeParagraph(int blockIngredients, List<Block> blockIngredientsList, List<Prefab> itemIngredients, Block blockResult, Prefab itemResult, int resultCount) {
+    public RecipeParagraph(int blockIngredients, List<Block> blockIngredientsList, List<Prefab> itemIngredients,
+                           Block blockResult, Prefab itemResult, int resultCount) {
         ingredientIcons = new ItemIcon[blockIngredients];
         for (int i = 0; i < ingredientIcons.length; i++) {
             ItemIcon itemIcon = new ItemIcon();
@@ -67,7 +70,7 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
      * Gets the render style for this paragraph.
      * <br>
      * Note that this paragraph's horizontal alignment will always be centered.
-     * 
+     *
      * @return This paragraph's render style.
      */
     @Override
@@ -82,7 +85,7 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
 
     /**
      * Gets the renderable paragraph for this paragraph, a.k.a. this object.
-     * 
+     *
      * @return this object.
      */
     @Override
@@ -90,10 +93,10 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
         return this;
     }
 
-    
+
     /**
      * Stores an item's icon into an ItemIcon
-     * 
+     *
      * @param itemIcon The icon to store the item into.
      * @param itemIngredient The item to get the icon of.
      */
@@ -108,7 +111,7 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
 
     /**
      * Stores a block's model into an ItemIcon.
-     * 
+     *
      * @param itemIcon The icon to store the block into.
      * @param blockIngredient The block to get the model of.
      */
@@ -124,10 +127,14 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
      * The ingredients are drawn in a strip from left to right, followed by the result.
      */
     @Override
-    public void renderContents(Canvas canvas, Vector2i startPos, ContainerRenderSpace containerRenderSpace, int leftIndent, int rightIndent, ParagraphRenderStyle defaultStyle, HorizontalAlign horizontalAlign, HyperlinkRegister hyperlinkRegister) {
+    public void renderContents(Canvas canvas, Vector2i startPos, ContainerRenderSpace containerRenderSpace,
+                               int leftIndent, int rightIndent, ParagraphRenderStyle defaultStyle,
+                               HorizontalAlign horizontalAlign, HyperlinkRegister hyperlinkRegister) {
         int ingredientsCount = ingredientIcons.length;
-        int drawingWidth = ingredientsCount * iconSize + (ingredientsCount - 1) * ingredientSpacing + resultSpacing + iconSize;
-        int x = startPos.x + horizontalAlign.getOffset(drawingWidth, containerRenderSpace.getWidthForVerticalPosition(startPos.y));
+        int drawingWidth =
+                ingredientsCount * iconSize + (ingredientsCount - 1) * ingredientSpacing + resultSpacing + iconSize;
+        int x = startPos.x + horizontalAlign.getOffset(drawingWidth,
+                containerRenderSpace.getWidthForVerticalPosition(startPos.y));
         int y = startPos.y + indentAbove;
         for (int i = 0; i < ingredientIcons.length; i++) {
             canvas.drawWidget(ingredientIcons[i], JomlUtil.rectangleiFromMinAndSize(x, y, iconSize, iconSize));
@@ -140,24 +147,23 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
 
     /**
      * Gets the preferred height of the paragraph.
-     * 
+     *
      * @param defaultStyle Not used
      * @param yStart Not used
      * @param containerRenderSpace Not used
      * @param sideIndents Not used
-     * 
      * @return The y dimension of this paragraph's preferred size.
      */
     @Override
-    public int getPreferredContentsHeight(ParagraphRenderStyle defaultStyle, int yStart, ContainerRenderSpace containerRenderSpace, int sideIndents) {
+    public int getPreferredContentsHeight(ParagraphRenderStyle defaultStyle, int yStart,
+                                          ContainerRenderSpace containerRenderSpace, int sideIndents) {
         return getPreferredSize().y;
     }
 
     /**
      * Gets the minimum width of this paragraph.
-     * 
+     *
      * @param defaultStyle Not used
-     * 
      * @return The x dimension of this paragraph's preferred size.
      */
     @Override
@@ -167,7 +173,7 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
 
     /**
      * Calculates the amount of space needed to display the recipe.
-     * 
+     *
      * @return A Vector2i whose x component is the width and y component is the height.
      */
     private Vector2i getPreferredSize() {

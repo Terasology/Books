@@ -1,30 +1,18 @@
-/*
- * Copyright 2017 MovingBlocks
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2020 The Terasology Foundation
+// SPDX-License-Identifier: Apache-2.0
 
 package org.terasology.books.logic;
 
-import org.terasology.entitySystem.Component;
-import org.terasology.entitySystem.prefab.Prefab;
-import org.terasology.world.block.Block;
+import org.terasology.engine.entitySystem.Component;
+import org.terasology.engine.entitySystem.prefab.Prefab;
+import org.terasology.engine.world.block.Block;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Used in a prefab to represent a recipe. The prefab can then be inserted in a book using a <recipe> tag inside a page as such:
+ * Used in a prefab to represent a recipe. The prefab can then be inserted in a book using a <recipe> tag inside a page
+ * as such:
  * <br>
  * <code><recipe module:prefab></code>
  */
@@ -37,7 +25,7 @@ public class BookRecipeComponent implements Component {
      * Blocks used in this recipe, if any.
      */
     public List<Block> blockIngredientsList = new ArrayList<>();
-    
+
     /**
      * Items used in this recipe, if any.
      */
