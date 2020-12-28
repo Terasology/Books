@@ -15,6 +15,7 @@
  */
 package org.terasology.books.logic;
 
+import org.joml.Vector3f;
 import org.terasology.entitySystem.entity.EntityRef;
 import org.terasology.entitySystem.event.ReceiveEvent;
 import org.terasology.entitySystem.systems.BaseComponentSystem;
@@ -24,7 +25,6 @@ import org.terasology.logic.inventory.events.BeforeItemPutInInventory;
 import org.terasology.logic.inventory.InventoryComponent;
 import org.terasology.logic.inventory.events.DropItemEvent;
 import org.terasology.logic.location.LocationComponent;
-import org.terasology.math.geom.Vector3f;
 import org.terasology.world.block.entity.CreateBlockDropsEvent;
 
 import java.util.List;
@@ -60,7 +60,7 @@ public class BookcaseSystem extends BaseComponentSystem {
     @ReceiveEvent(components = {BookcaseComponent.class})
     public void onDestroyBookCase(CreateBlockDropsEvent event, EntityRef entity) {
         if (entity.hasComponent(InventoryComponent.class)) {
-            Vector3f location = entity.getComponent(LocationComponent.class).getWorldPosition();
+            Vector3f location = entity.getComponent(LocationComponent.class).getWorldPosition(new Vector3f());
             InventoryComponent inventory = entity.getComponent(InventoryComponent.class);
             List<EntityRef> items = inventory.itemSlots;
             for (EntityRef item: items) {
