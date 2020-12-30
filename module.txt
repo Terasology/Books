@@ -1,14 +1,20 @@
 {
-    "id": "Books",
-    "version": "1.1.0",
-    "author": "nihal111, bi0hax, Waterpicker",
-    "displayName": "Books and Bookcases",
-    "description": "This module introduces logic and assets for books and bookcases",
-    "dependencies": [
-        { "id": "CoreAssets", "minVersion": "2.0.1" },
-        { "id": "Inventory", "minVersion": "1.1.0" }
-    ],
-    "isServerSideOnly": false,
-    "isAsset": true,
-    "isLibrary": true
+  "id": "Books",
+  "version": "1.2.0-SNAPSHOT",
+  "author": "nihal111, bi0hax, Waterpicker",
+  "displayName": "Books and Bookcases",
+  "description": "This module introduces logic and assets for books and bookcases",
+  "dependencies": [
+    {
+      "id": "CoreAssets",
+      "minVersion": "2.0.1"
+    },
+    {
+      "id": "Inventory",
+      "minVersion": "1.1.0"
+    }
+  ],
+  "isServerSideOnly": false,
+  "isAsset": true,
+  "isLibrary": true
 }
