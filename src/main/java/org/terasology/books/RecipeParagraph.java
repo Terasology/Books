@@ -4,10 +4,10 @@ package org.terasology.books;
 
 import org.terasology.books.logic.BookRecipeComponent;
 import org.terasology.entitySystem.prefab.Prefab;
+import org.terasology.joml.geom.Rectanglei;
 import org.terasology.logic.common.DisplayNameComponent;
 import org.terasology.logic.inventory.ItemComponent;
 import org.joml.Vector2i;
-import org.terasology.math.JomlUtil;
 import org.terasology.nui.Canvas;
 import org.terasology.nui.HorizontalAlign;
 import org.terasology.rendering.nui.layers.ingame.inventory.ItemIcon;
@@ -36,7 +36,7 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
 
     /**
      * Creates a new RecipeParagraph using data from a {@link BookRecipeComponent}.
-     * 
+     *
      * @param blockIngredients Blocks used in this recipe, if any.
      * @param itemIngredients Items used in this recipe, if any.
      * @param blockResult The result of the recipe, if it is a block. If it is an item, this should be left empty.
@@ -67,7 +67,7 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
      * Gets the render style for this paragraph.
      * <br>
      * Note that this paragraph's horizontal alignment will always be centered.
-     * 
+     *
      * @return This paragraph's render style.
      */
     @Override
@@ -82,7 +82,7 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
 
     /**
      * Gets the renderable paragraph for this paragraph, a.k.a. this object.
-     * 
+     *
      * @return this object.
      */
     @Override
@@ -90,10 +90,10 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
         return this;
     }
 
-    
+
     /**
      * Stores an item's icon into an ItemIcon
-     * 
+     *
      * @param itemIcon The icon to store the item into.
      * @param itemIngredient The item to get the icon of.
      */
@@ -108,7 +108,7 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
 
     /**
      * Stores a block's model into an ItemIcon.
-     * 
+     *
      * @param itemIcon The icon to store the block into.
      * @param blockIngredient The block to get the model of.
      */
@@ -126,26 +126,28 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
     @Override
     public void renderContents(Canvas canvas, Vector2i startPos, ContainerRenderSpace containerRenderSpace, int leftIndent, int rightIndent, ParagraphRenderStyle defaultStyle, HorizontalAlign horizontalAlign, HyperlinkRegister hyperlinkRegister) {
         int ingredientsCount = ingredientIcons.length;
-        int drawingWidth = ingredientsCount * iconSize + (ingredientsCount - 1) * ingredientSpacing + resultSpacing + iconSize;
-        int x = startPos.x + horizontalAlign.getOffset(drawingWidth, containerRenderSpace.getWidthForVerticalPosition(startPos.y));
+        int drawingWidth =
+                ingredientsCount * iconSize + (ingredientsCount - 1) * ingredientSpacing + resultSpacing + iconSize;
+        int x = startPos.x + horizontalAlign.getOffset(drawingWidth,
+                containerRenderSpace.getWidthForVerticalPosition(startPos.y));
         int y = startPos.y + indentAbove;
         for (int i = 0; i < ingredientIcons.length; i++) {
-            canvas.drawWidget(ingredientIcons[i], JomlUtil.rectangleiFromMinAndSize(x, y, iconSize, iconSize));
+            canvas.drawWidget(ingredientIcons[i], new Rectanglei(x, y).setSize(iconSize, iconSize));
             x += iconSize + ingredientSpacing;
         }
         x -= ingredientSpacing;
         x += resultSpacing;
-        canvas.drawWidget(resultIcon, JomlUtil.rectangleiFromMinAndSize(x, y, iconSize, iconSize));
+        canvas.drawWidget(resultIcon, new Rectanglei(x, y).setSize(iconSize, iconSize));
     }
 
     /**
      * Gets the preferred height of the paragraph.
-     * 
+     *
      * @param defaultStyle Not used
      * @param yStart Not used
      * @param containerRenderSpace Not used
      * @param sideIndents Not used
-     * 
+     *
      * @return The y dimension of this paragraph's preferred size.
      */
     @Override
@@ -155,9 +157,9 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
 
     /**
      * Gets the minimum width of this paragraph.
-     * 
+     *
      * @param defaultStyle Not used
-     * 
+     *
      * @return The x dimension of this paragraph's preferred size.
      */
     @Override
@@ -167,7 +169,7 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
 
     /**
      * Calculates the amount of space needed to display the recipe.
-     * 
+     *
      * @return A Vector2i whose x component is the width and y component is the height.
      */
     private Vector2i getPreferredSize() {
