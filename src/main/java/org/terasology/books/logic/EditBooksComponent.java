@@ -15,7 +15,7 @@
  */
 package org.terasology.books.logic;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 /**
  * Items containing this component give the player the ability to edit books

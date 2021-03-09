@@ -16,7 +16,7 @@
 
 package org.terasology.books.logic;
 
-import org.terasology.entitySystem.Component;
+import org.terasology.engine.entitySystem.Component;
 
 /**
  * Marker component indicating that a block with an inventory should act as a bookshelf, storing only books.

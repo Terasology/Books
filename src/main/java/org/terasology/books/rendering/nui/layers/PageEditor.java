@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: Apache-2.0
 package org.terasology.books.rendering.nui.layers;
 
-import org.terasology.registry.In;
-import org.terasology.rendering.nui.CoreScreenLayer;
-import org.terasology.rendering.nui.NUIManager;
+import org.terasology.engine.registry.In;
+import org.terasology.engine.rendering.nui.CoreScreenLayer;
+import org.terasology.engine.rendering.nui.NUIManager;
 import org.terasology.nui.widgets.UIButton;
 import org.terasology.nui.widgets.UIText;
 
