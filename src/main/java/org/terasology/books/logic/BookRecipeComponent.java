@@ -44,7 +44,7 @@ public class BookRecipeComponent implements Component<BookRecipeComponent> {
     public int resultCount;
 
     @Override
-    public void copy(BookRecipeComponent other) {
+    public void copyFrom(BookRecipeComponent other) {
         this.blockIngredients = other.blockIngredients;
         this.blockIngredientsList = Lists.newArrayList(other.blockIngredientsList);
         this.itemIngredients = Lists.newArrayList(other.itemIngredients);

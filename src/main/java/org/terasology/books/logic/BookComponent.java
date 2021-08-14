@@ -38,7 +38,7 @@ public class BookComponent implements Component<BookComponent> {
     public List<String> pages = new ArrayList<>(Lists.newArrayList("", ""));
 
     @Override
-    public void copy(BookComponent other) {
+    public void copyFrom(BookComponent other) {
         this.tint = other.tint;
         this.type = other.type;
         this.readOnly = other.readOnly;
