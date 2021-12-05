@@ -44,7 +44,7 @@ public class BookcaseSystem extends BaseComponentSystem {
      * @param event the triggering event (somebody tried to put something into the bookcase)
      * @param entity the object that is being submitted as an potential entry to the bookcase's inventory
      */
-    @ReceiveEvent(components = {BookcaseComponent.class})
+    @ReceiveEvent(components = BookcaseComponent.class)
     public void filterBook(BeforeItemPutInInventory event, EntityRef entity) {
         if (!event.getItem().hasComponent(BookComponent.class)) {
             event.consume();
@@ -57,7 +57,7 @@ public class BookcaseSystem extends BaseComponentSystem {
      * @param event the triggering event (something caused block drops - the bookcase was destroyed)
      * @param entity the bookcase's entity, has the target inventory to go through
      */
-    @ReceiveEvent(components = {BookcaseComponent.class})
+    @ReceiveEvent(components = BookcaseComponent.class)
     public void onDestroyBookCase(CreateBlockDropsEvent event, EntityRef entity, LocationComponent location, InventoryComponent inventory) {
         Vector3f pos = location.getWorldPosition(new Vector3f());
         List<EntityRef> items = inventory.itemSlots;
