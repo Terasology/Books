@@ -1,6 +1,5 @@
 // Copyright 2020 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
-
 package org.terasology.books.rendering.nui.layers;
 
 import com.google.common.base.Joiner;
@@ -11,13 +10,10 @@ import org.terasology.books.RecipeParagraph;
 import org.terasology.books.logic.BookComponent;
 import org.terasology.books.logic.BookRecipeComponent;
 import org.terasology.books.logic.EditBooksComponent;
-import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.prefab.PrefabManager;
-import org.terasology.engine.logic.clipboard.ClipboardManager;
 import org.terasology.engine.logic.common.DisplayNameComponent;
-import org.terasology.module.inventory.systems.InventoryUtils;
 import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.BaseInteractionScreen;
@@ -26,11 +22,9 @@ import org.terasology.engine.rendering.nui.widgets.browser.data.DocumentData;
 import org.terasology.engine.rendering.nui.widgets.browser.data.ParagraphData;
 import org.terasology.engine.rendering.nui.widgets.browser.data.basic.HTMLLikeParser;
 import org.terasology.engine.rendering.nui.widgets.browser.ui.BrowserWidget;
-import org.terasology.engine.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
 import org.terasology.engine.utilities.Assets;
-import org.terasology.engine.world.block.BlockManager;
+import org.terasology.module.inventory.systems.InventoryUtils;
 import org.terasology.nui.Color;
-import org.terasology.nui.HorizontalAlign;
 import org.terasology.nui.UITextureRegion;
 import org.terasology.nui.WidgetUtil;
 import org.terasology.nui.databinding.Binding;
