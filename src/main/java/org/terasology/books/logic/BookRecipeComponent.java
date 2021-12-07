@@ -12,9 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Used in a prefab to represent a recipe. The prefab can then be inserted in a book using a <recipe> tag inside a page as such:
- * <br>
- * <code><recipe module:prefab></code>
+ * Used in a prefab to represent a recipe. The prefab can then be inserted in a book using a <pre>{@code <recipe>}</pre>
+ * tag inside a page as such: <br>
+ * <pre>{@code <recipe module:prefab>}</pre>
  */
 public class BookRecipeComponent implements Component<BookRecipeComponent> {
     /**
