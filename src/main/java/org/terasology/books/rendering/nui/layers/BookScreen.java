@@ -1,6 +1,5 @@
 // Copyright 2020 The Terasology Foundation
 // SPDX-License-Identifier: Apache-2.0
-
 package org.terasology.books.rendering.nui.layers;
 
 import com.google.common.base.Joiner;
@@ -11,13 +10,10 @@ import org.terasology.books.RecipeParagraph;
 import org.terasology.books.logic.BookComponent;
 import org.terasology.books.logic.BookRecipeComponent;
 import org.terasology.books.logic.EditBooksComponent;
-import org.terasology.engine.entitySystem.entity.EntityManager;
 import org.terasology.engine.entitySystem.entity.EntityRef;
 import org.terasology.engine.entitySystem.prefab.Prefab;
 import org.terasology.engine.entitySystem.prefab.PrefabManager;
-import org.terasology.engine.logic.clipboard.ClipboardManager;
 import org.terasology.engine.logic.common.DisplayNameComponent;
-import org.terasology.module.inventory.systems.InventoryUtils;
 import org.terasology.engine.logic.players.LocalPlayer;
 import org.terasology.engine.registry.In;
 import org.terasology.engine.rendering.nui.BaseInteractionScreen;
@@ -26,11 +22,9 @@ import org.terasology.engine.rendering.nui.widgets.browser.data.DocumentData;
 import org.terasology.engine.rendering.nui.widgets.browser.data.ParagraphData;
 import org.terasology.engine.rendering.nui.widgets.browser.data.basic.HTMLLikeParser;
 import org.terasology.engine.rendering.nui.widgets.browser.ui.BrowserWidget;
-import org.terasology.engine.rendering.nui.widgets.browser.ui.style.ParagraphRenderStyle;
 import org.terasology.engine.utilities.Assets;
-import org.terasology.engine.world.block.BlockManager;
+import org.terasology.module.inventory.systems.InventoryUtils;
 import org.terasology.nui.Color;
-import org.terasology.nui.HorizontalAlign;
 import org.terasology.nui.UITextureRegion;
 import org.terasology.nui.WidgetUtil;
 import org.terasology.nui.databinding.Binding;
@@ -44,26 +38,9 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * A simple enumeration containing different states the book can be in.
- */
-enum State {
-    CLOSED_LEFT,
-    OPEN_LEFT,
-    PAGES,
-    OPEN_RIGHT,
-    CLOSED_RIGHT
-}
-
-/**
  * A Screen class that displays a book. The book is optionally editable, has pages which can be switched and there is a title.
  */
 public class BookScreen extends BaseInteractionScreen {
-    private static final String STATUS_EDITING = "Editing";
-    private static final String STATUS_READING = "Reading";
-    private static final String STATUS_READ_ONLY = "Read-only";
-
-    private static final Logger logger = LoggerFactory.getLogger(BookScreen.class);
-
     /* Local List of pages that the bookComponent contains */
     static List<String> pages;
     /* Boolean to see which edit button was clicked (left or right) */
@@ -71,18 +48,7 @@ public class BookScreen extends BaseInteractionScreen {
     /* Index for finding which page number is opened */
     static Binding<Integer> index;
 
-    @In
-    private static PrefabManager prefabManager;
-    @In
-    private static BlockManager blockManager;
-    @In
-    private NUIManager nuiManager;
-    @In
-    private LocalPlayer localPlayer;
-    @In
-    private ClipboardManager clipboardManager;
-    @In
-    private EntityManager entityManager;
+    private static final Logger logger = LoggerFactory.getLogger(BookScreen.class);
 
     private static BookComponent book;
     private static EntityRef bookEntity;
@@ -95,13 +61,32 @@ public class BookScreen extends BaseInteractionScreen {
     private static UIButton arrowForward;
     private static UIButton arrowBackward;
     private static UILabel title;
-    private static Binding<UITextureRegion> coverBackL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorLeft").get());
-    private static Binding<UITextureRegion> coverBackR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#interiorRight").get());
-    private static Binding<UITextureRegion> coverFrontL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorLeft").get());
-    private static Binding<UITextureRegion> coverFrontR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#exteriorRight").get());
-    private static Binding<UITextureRegion> pageL = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageLeft").get());
-    private static Binding<UITextureRegion> pageR = new DefaultBinding<>(Assets.getTextureRegion("Books:book#pageRight").get());
-    private static Binding<UITextureRegion> blank = new DefaultBinding<>(Assets.getTextureRegion("Books:blank").get());
+    private static final Binding<UITextureRegion> COVER_BACK_L = new DefaultBinding<>(Assets.getTextureRegion(
+            "Books:book#interiorLeft").get());
+    private static final Binding<UITextureRegion> COVER_BACK_R = new DefaultBinding<>(Assets.getTextureRegion(
+            "Books:book#interiorRight").get());
+    private static final Binding<UITextureRegion> COVER_FRONT_L = new DefaultBinding<>(Assets.getTextureRegion(
+            "Books:book#exteriorLeft").get());
+    private static final Binding<UITextureRegion> COVER_FRONT_R = new DefaultBinding<>(Assets.getTextureRegion(
+            "Books:book#exteriorRight").get());
+    private static final Binding<UITextureRegion> PAGE_L = new DefaultBinding<>(Assets.getTextureRegion(
+            "Books:book#pageLeft").get());
+    private static final Binding<UITextureRegion> PAGE_R = new DefaultBinding<>(Assets.getTextureRegion(
+            "Books:book#pageRight").get());
+    private static final Binding<UITextureRegion> BLANK = new DefaultBinding<>(Assets.getTextureRegion(
+            "Books:blank").get());
+
+    private static final String STATUS_EDITING = "Editing";
+    private static final String STATUS_READING = "Reading";
+    private static final String STATUS_READ_ONLY = "Read-only";
+
+
+    @In
+    private static PrefabManager prefabManager;
+    @In
+    private NUIManager nuiManager;
+    @In
+    private LocalPlayer localPlayer;
 
     private String status;
     private UIButton save;
@@ -112,12 +97,6 @@ public class BookScreen extends BaseInteractionScreen {
     private UIButton deleteRight;
     private UIButton addPage;
     private UILabel statusText;
-    private ParagraphRenderStyle centerRenderStyle = new ParagraphRenderStyle() {
-        @Override
-        public HorizontalAlign getHorizontalAlignment() {
-            return HorizontalAlign.CENTER;
-        }
-    };
 
     public BookScreen() {
     }
@@ -136,33 +115,36 @@ public class BookScreen extends BaseInteractionScreen {
      */
     private static Collection<ParagraphData> createParagraphs(String text) {
         Collection<ParagraphData> paragraphs = new ArrayList<ParagraphData>();
-        while (text.length() > 0) {
-            if (text.contains("<recipe")) {
-                int i = text.indexOf("<recipe");
-                paragraphs.add(createTextParagraph(text.substring(0, i)));
-                text = text.substring(i);
-                i = text.indexOf(">");
+        String inputText = text;
+        while (inputText.length() > 0) {
+            if (inputText.contains("<recipe")) {
+                int i = inputText.indexOf("<recipe");
+                paragraphs.add(createTextParagraph(inputText.substring(0, i)));
+                inputText = inputText.substring(i);
+                i = inputText.indexOf(">");
                 // Capture the text following the "<recipe" tag and remove spaces
-                String recipePrefabName = text.substring("<recipe".length(), i).replaceAll("\\s","");
+                String recipePrefabName = inputText.substring("<recipe".length(), i).replaceAll("\\s", "");
                 paragraphs.add(createRecipeParagraph(recipePrefabName));
-                text = text.substring(i + 1);
+                inputText = inputText.substring(i + 1);
             } else {
-                paragraphs.add(createTextParagraph(text));
-                text = "";
+                paragraphs.add(createTextParagraph(inputText));
+                inputText = "";
             }
         }
         return paragraphs;
     }
 
     private static ParagraphData createTextParagraph(String text) {
-        return HTMLLikeParser.parseHTMLLikeParagraph(null, "<c " + "198"/*Color.BLACK.getRepresentation()*/ + ">" + text.replace("\n", "<l>") + "</c>");
+        return HTMLLikeParser.parseHTMLLikeParagraph(null,
+                "<c 198>" + text.replace("\n", "<l>") + "</c>");
     }
 
     private static RecipeParagraph createRecipeParagraph(String prefabName) {
         Prefab recipePrefab = prefabManager.getPrefab(prefabName);
         BookRecipeComponent bookRecipeComponent = recipePrefab.getComponent(BookRecipeComponent.class);
-        return new RecipeParagraph(bookRecipeComponent.blockIngredients, bookRecipeComponent.blockIngredientsList, bookRecipeComponent.itemIngredients,
-                bookRecipeComponent.blockResult, bookRecipeComponent.itemResult, bookRecipeComponent.resultCount);
+        return new RecipeParagraph(bookRecipeComponent.blockIngredients, bookRecipeComponent.blockIngredientsList,
+                bookRecipeComponent.itemIngredients, bookRecipeComponent.blockResult,
+                bookRecipeComponent.itemResult, bookRecipeComponent.resultCount);
     }
 
     static State getState() {
@@ -206,8 +188,8 @@ public class BookScreen extends BaseInteractionScreen {
     }
 
     static void updatePage() {
-        pageLeft.bindTexture(blank);
-        pageRight.bindTexture(blank);
+        pageLeft.bindTexture(BLANK);
+        pageRight.bindTexture(BLANK);
         arrowForward.setVisible(true);
         arrowBackward.setVisible(true);
         title.setText("");
@@ -216,8 +198,8 @@ public class BookScreen extends BaseInteractionScreen {
         textRight.navigateTo(createDocument(getTextRight()));
 
         if (getState().equals(State.CLOSED_RIGHT)) {
-            coverRight.bindTexture(coverFrontR);
-            coverLeft.bindTexture(blank);
+            coverRight.bindTexture(COVER_FRONT_R);
+            coverLeft.bindTexture(BLANK);
             arrowBackward.setVisible(false);
             if (book.title != null) {
                 title.setText(book.title);
@@ -234,20 +216,20 @@ public class BookScreen extends BaseInteractionScreen {
                 }
             }
         } else if (getState().equals(State.CLOSED_LEFT)) {
-            coverRight.bindTexture(blank);
-            coverLeft.bindTexture(coverFrontL);
+            coverRight.bindTexture(BLANK);
+            coverLeft.bindTexture(COVER_FRONT_L);
             arrowForward.setVisible(false);
         } else {
-            coverLeft.bindTexture(coverBackL);
-            coverRight.bindTexture(coverBackR);
+            coverLeft.bindTexture(COVER_BACK_L);
+            coverRight.bindTexture(COVER_BACK_R);
 
             if (getState().equals(State.OPEN_RIGHT)) {
-                pageRight.bindTexture(pageR);
+                pageRight.bindTexture(PAGE_R);
             } else if (getState().equals(State.OPEN_LEFT)) {
-                pageLeft.bindTexture(pageL);
+                pageLeft.bindTexture(PAGE_L);
             } else {
-                pageLeft.bindTexture(pageL);
-                pageRight.bindTexture(pageR);
+                pageLeft.bindTexture(PAGE_L);
+                pageRight.bindTexture(PAGE_R);
             }
         }
     }
@@ -510,5 +492,16 @@ public class BookScreen extends BaseInteractionScreen {
         if (getState().equals(State.PAGES)) {
             index.set(index.get() - 1);
         }
+    }
+
+    /**
+     * A simple enumeration containing different states the book can be in.
+     */
+    enum State {
+        CLOSED_LEFT,
+        OPEN_LEFT,
+        PAGES,
+        OPEN_RIGHT,
+        CLOSED_RIGHT
     }
 }

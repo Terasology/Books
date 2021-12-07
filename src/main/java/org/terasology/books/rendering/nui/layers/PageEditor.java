@@ -35,9 +35,9 @@ public class PageEditor extends CoreScreenLayer {
                 BookScreen.updatePage();
                 nuiManager.closeScreen(this);
             } else {
-                if (BookScreen.getState().equals(State.OPEN_RIGHT)) {
+                if (BookScreen.getState().equals(BookScreen.State.OPEN_RIGHT)) {
                     BookScreen.pages.set(BookScreen.index.get(), pageText.getText());
-                } else if (BookScreen.getState().equals(State.PAGES)) {
+                } else if (BookScreen.getState().equals(BookScreen.State.PAGES)) {
                     BookScreen.pages.set(BookScreen.index.get() + 1, pageText.getText());
                 }
                 BookScreen.updatePage();
