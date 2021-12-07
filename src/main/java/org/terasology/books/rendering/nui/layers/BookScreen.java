@@ -38,17 +38,6 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * A simple enumeration containing different states the book can be in.
- */
-enum State {
-    CLOSED_LEFT,
-    OPEN_LEFT,
-    PAGES,
-    OPEN_RIGHT,
-    CLOSED_RIGHT
-}
-
-/**
  * A Screen class that displays a book. The book is optionally editable, has pages which can be switched and there is a title.
  */
 public class BookScreen extends BaseInteractionScreen {
@@ -503,5 +492,16 @@ public class BookScreen extends BaseInteractionScreen {
         if (getState().equals(State.PAGES)) {
             index.set(index.get() - 1);
         }
+    }
+
+    /**
+     * A simple enumeration containing different states the book can be in.
+     */
+    enum State {
+        CLOSED_LEFT,
+        OPEN_LEFT,
+        PAGES,
+        OPEN_RIGHT,
+        CLOSED_RIGHT
     }
 }
