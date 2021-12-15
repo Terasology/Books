@@ -43,7 +43,8 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
      * @param itemResult The result of the recipe, if it is an item. If it is a block, this should be left empty.
      * @param resultCount The amount of blocks/items produced by this recipe.
      */
-    public RecipeParagraph(int blockIngredients, List<Block> blockIngredientsList, List<Prefab> itemIngredients, Block blockResult, Prefab itemResult, int resultCount) {
+    public RecipeParagraph(int blockIngredients, List<Block> blockIngredientsList, List<Prefab> itemIngredients, Block blockResult,
+                           Prefab itemResult, int resultCount) {
         ingredientIcons = new ItemIcon[blockIngredients];
         for (int i = 0; i < ingredientIcons.length; i++) {
             ItemIcon itemIcon = new ItemIcon();
@@ -124,7 +125,8 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
      * The ingredients are drawn in a strip from left to right, followed by the result.
      */
     @Override
-    public void renderContents(Canvas canvas, Vector2i startPos, ContainerRenderSpace containerRenderSpace, int leftIndent, int rightIndent, ParagraphRenderStyle defaultStyle, HorizontalAlign horizontalAlign, HyperlinkRegister hyperlinkRegister) {
+    public void renderContents(Canvas canvas, Vector2i startPos, ContainerRenderSpace containerRenderSpace, int leftIndent, int rightIndent,
+                               ParagraphRenderStyle defaultStyle, HorizontalAlign horizontalAlign, HyperlinkRegister hyperlinkRegister) {
         int ingredientsCount = ingredientIcons.length;
         int drawingWidth =
                 ingredientsCount * iconSize + (ingredientsCount - 1) * ingredientSpacing + resultSpacing + iconSize;
