@@ -114,7 +114,7 @@ public class RecipeParagraph implements ParagraphData, ParagraphRenderable {
      * @param blockIngredient The block to get the model of.
      */
     private void initializeForBlock(ItemIcon itemIcon, Block blockIngredient) {
-        itemIcon.setMesh(blockIngredient.getMesh());
+        itemIcon.setMesh(blockIngredient.getMeshGenerator().getStandaloneMesh());
         itemIcon.setMeshTexture(Assets.getTexture("engine:terrain").get());
         itemIcon.setTooltip(blockIngredient.getDisplayName());
     }
